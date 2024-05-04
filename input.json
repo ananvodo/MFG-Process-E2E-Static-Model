@@ -1,0 +1,16 @@
+{
+    "Bioreactor": {
+        "prodDays": 12.5,
+        "titer": 250.75,
+        "vvd": 45.3,
+        "brxVol": 1500.5,
+        "bleedPercent": 5.0
+    },
+    "PerfusionFilter": {
+        "innerDiam": 10.0,
+        "length": 10.0,
+        "surfaceArea": 100.0,
+        "targetShearRate": 0.5,
+        "brxProdOutFlow": 65
+    }
+}

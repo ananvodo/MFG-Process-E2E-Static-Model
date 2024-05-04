@@ -1,6 +1,6 @@
 class Bioreactor():
 
-    def __init__(self, prodDays: int, titer: float, brxVol: int, vvd: int, bleedPercent: float):
+    def __init__(self, prodDays: int, titer: float, brxVol: int, vvd: int, bleedPercent: float) -> None:
         self.prodDays = prodDays  # number of days to produce
         self.titer = titer  # g/L of BRX
         self.brxVol = brxVol  # in L
@@ -8,7 +8,7 @@ class Bioreactor():
         self.bleedPercent = bleedPercent  # bleed is percentage
         self.outFlow: float = self.brxVol * self.vvd / \
             24  # in L/h. The 24 is to convert to h. This is really the perf flowrate
-        self.mediaFeed: float = self.mediaFeed * (1 + self.bleedPercent)
-        self.bleedFlow: float = self.mediaFeed * self.bleedPercent
+        self.mediaFeed: float = self.outFlow * (1 + self.bleedPercent)
+        self.bleedFlow: float = self.outFlow * self.bleedPercent
 
         return None
