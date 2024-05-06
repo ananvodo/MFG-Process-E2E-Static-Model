@@ -9,8 +9,9 @@ from Bioreactor import Bioreactor
 from PerfusionFilter import PerfusionFilter
 from Input import Input
 
-input_handler = Input('input.json')
+input_handler = Input.fromFile('input.json')
 bioreactor = input_handler.instances.get('Bioreactor')
+perfusionFilter = input_handler.instances.get('PerfusionFilter')
 
 
 # bioreactor = Bioreactor(prodDays, titer, brxVol, vvd, bleedPercent)

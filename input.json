@@ -7,10 +7,10 @@
         "bleedPercent": 5.0
     },
     "PerfusionFilter": {
-        "innerDiam": 10.0,
-        "length": 10.0,
-        "surfaceArea": 100.0,
-        "targetShearRate": 0.5,
+        "innerDiam": 0.14,
+        "length": 117,
+        "surfaceArea": 88000.0,
+        "targetShearRate": 1500,
         "brxProdOutFlow": 65
     }
 }

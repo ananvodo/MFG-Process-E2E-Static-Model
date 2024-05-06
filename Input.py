@@ -5,32 +5,42 @@ from PerfusionFilter import PerfusionFilter
 
 
 class Input:
-    def __init__(self, json_data):
-        self.classes = {
-            "Bioreactor": Bioreactor,
-            "PerfusionFilter": PerfusionFilter
-        }
-        # self.instances = self.create_instances(json_data)
-        self.instances = self.load_and_create_instances(json_data)
 
-    def load_and_create_instances(self, filename):
+    classes = {
+        "Bioreactor": Bioreactor,
+        "PerfusionFilter": PerfusionFilter
+    }
+
+    def __init__(self, instances):
+        self.instances = instances
+
+    @classmethod
+    def from_file(cls, filename):
         instances = {}
+        # Read the JSON file
         with open(filename, 'r') as file:
             data = json.load(file)
+            # Loop through the data and create instances of the classes
             for key, params in data.items():
-                if key in self.classes:
-                    class_ = self.classes[key]
+                # Check if the class exists
+                if key in Input.classes:
+                    class_ = Input.classes[key]
                     # Create an instance of the class using unpacking of the dictionary
                     instance = class_(**params)
                     instances[key] = instance
-        return instances
 
-    def create_instances(self, data):
+        return cls(instances)
+
+    @classmethod
+    def from_http(cls, data):
         instances = {}
+        # Loop through the data and create instances of the classes
         for key, params in data.items():
-            if key in self.classes:
-                class_ = self.classes[key]
+            # Check if the class exists
+            if key in Input.classes:
+                class_ = Input.classes[key]
                 # Create an instance of the class using unpacking of the dictionary
                 instance = class_(**params)
                 instances[key] = instance
-        return instances
+
+        return cls(instances)
