@@ -1,49 +1,146 @@
-class Susv():
+from abc import ABC, abstractmethod
 
-    def __init__(self, percentFlowComp: float, inflow: float, flowPercentCompensation: float,
-                 stopHighAlarm: float, highAlarm: float, normalAlarm: float, lowAlarm: float,
-                 stopLowAlarm: float, vesselVolume: float, phAdjustPercent: float,
-                 conductivityAdjustPercent: float):
-        self.percentFlowComp = percentFlowComp
-        self.inFlow = inflow
-        self.flowPercentCompensation = flowPercentCompensation
-        self.stopHighAlarm = stopHighAlarm
-        self.highAlarm = highAlarm
-        self.normalAlarm = normalAlarm
-        self.lowAlarm = lowAlarm
-        self.stopLowAlarm = stopLowAlarm
-        self.vesselVolume = vesselVolume
+
+class Susv(ABC):
+
+    def __init__(
+        self,
+        flowPercentCompensation: float,
+        designVolume: float,
+        stopHighVolumePercent: float,
+        highVolumePercent: float,
+        normalVolumePercent: float,
+        lowVolumePercent: float,
+        stopLowVolumePercent: float,
+        phAdjustPercent: float,
+        conductivityAdjustPercent: float
+    ) -> None:
+
+        # -------------------------------------
+        # User defined attributes
+        # -------------------------------------
+        # Process parameters
+        self.designVolume = designVolume  # in L. This is the working volume of the SUSV
         self.phAdjustPercent = phAdjustPercent
         self.conductivityAdjustPercent = conductivityAdjustPercent
+        self.flowPercentCompensation = flowPercentCompensation
+
+        # Volume percentages
+        self.stopHighVolumePercent = stopHighVolumePercent
+        self.highVolumePercent = highVolumePercent
+        self.normalVolumePercent = normalVolumePercent
+        self.lowVolumePercent = lowVolumePercent
+        self.stopLowVolumePercent = stopLowVolumePercent
+
+        # Volume Volumes
+        self.stopHighVolume: float = self.designVolume * self.stopHighVolumePercent / 100
+        self.highVolume: float = self.designVolume * self.highVolumePercent / 100
+        self.normalVolume: float = self.designVolume * self.normalVolumePercent / 100
+        self.lowVolume: float = self.designVolume * self.lowVolumePercent / 100
+        self.stopLowVolume: float = self.designVolume * self.stopLowVolumePercent / 100
+
+        # -------------------------------------
+        # Calculated attributes
+        # -------------------------------------
+        # Flows
+        self.inFlow: float = 0
+        self.lowOutFlow: float = 0
+        self.normalOutflow: float = 0
+        self.highOutFlow: float = 0
+
+        # Residence times
+        self.stopHighRt: float = 0
+        self.highRt: float = 0
+        self.normalRt: float = 0
+        self.lowRt: float = 0
+        self.stopLowRt: float = 0
+
+        return None
+
+    @abstractmethod
+    def provide_flows(self) -> None:
+        pass
 
         return None
 
 
 class ContinuousSusv(Susv):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(
+        self,
+        flowPercentCompensation: float,
+        designVolume: float,
+        stopHighVolumePercent: float,
+        highVolumePercent: float,
+        normalVolumePercent: float,
+        lowVolumePercent: float,
+        stopLowVolumePercent: float,
+        phAdjustPercent: float,
+        conductivityAdjustPercent: float
+    ):
+        super().__init__(
+            flowPercentCompensation,
+            designVolume,
+            stopHighVolumePercent,
+            highVolumePercent,
+            normalVolumePercent,
+            lowVolumePercent,
+            stopLowVolumePercent,
+            phAdjustPercent,
+            conductivityAdjustPercent
+        )
 
         return None
 
-    def setOutFlow(self, outFlow: float):
-        self.normalOutflow: float = outFlow
+    def provide_flows(self, inflow: float):
+        self.inFlow: float = inflow
+        self.normalOutflow: float = self.inFlow
+
         self.lowOutFlow: float = self.normalOutflow * \
-            (1 - self.flowPercentCompensation)
+            (1 - self.flowPercentCompensation / 100)
         self.highOutFlow: float = self.normalOutflow * \
-            (1 + self.flowPercentCompensation)
+            (1 + self.flowPercentCompensation / 100)
+
+        self.stopHighRt: float = self.stopHighVolume / self.inFlow
+        self.highRt: float = self.highVolume / self.inFlow
+        self.normalRt: float = self.normalVolume / self.inFlow
+        self.lowRt: float = self.lowVolume / self.inFlow
+        self.stopLowRt: float = self.stopLowVolume / self.inFlow
 
         return None
 
 
 class SemiContinuousSusv(Susv):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(
+        self,
+        flowPercentCompensation: float,
+        designVolume: float,
+        stopHighVolumePercent: float,
+        highVolumePercent: float,
+        normalVolumePercent: float,
+        lowVolumePercent: float,
+        stopLowVolumePercent: float,
+        phAdjustPercent: float,
+        conductivityAdjustPercent: float
+    ):
+        super().__init__(
+            flowPercentCompensation,
+            designVolume,
+            stopHighVolumePercent,
+            highVolumePercent,
+            normalVolumePercent,
+            lowVolumePercent,
+            stopLowVolumePercent,
+            phAdjustPercent,
+            conductivityAdjustPercent
+        )
 
         return None
 
-    def setOutFlow(self):
+    def provide_flows(self, inflow: float, outFlow: float | None = None):
+        self.inflow: float = inflow * \
+            (1 + self.phAdjustPercent / 100 + self.conductivityAdjustPercent / 100)
         self.normalOutflow: float = self.inFlow * \
             (1 + self.phAdjustPercent / 100 + self.conductivityAdjustPercent / 100)
         self.lowOutFlow: float = self.normalOutflow * \

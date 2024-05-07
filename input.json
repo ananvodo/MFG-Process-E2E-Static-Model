@@ -1,16 +1,26 @@
 {
     "Bioreactor": {
-        "prodDays": 12.5,
-        "titer": 250.75,
-        "vvd": 45.3,
-        "brxVol": 1500.5,
-        "bleedPercent": 5.0
+        "prodDays": 18,
+        "titer": 0.5,
+        "vvd": 2,
+        "volume": 900,
+        "bleedPercent": 0
     },
     "PerfusionFilter": {
         "innerDiam": 0.14,
         "length": 117,
         "surfaceArea": 88000.0,
-        "targetShearRate": 1500,
-        "brxProdOutFlow": 65
+        "targetShearRate": 1500
+    },
+    "Susv1": {
+        "flowPercentCompensation": 15,
+        "designVolume": 200,
+        "stopHighVolumePercent": 95,
+        "highVolumePercent": 65,
+        "normalVolumePercent": 50,
+        "lowVolumePercent": 35,
+        "stopLowVolumePercent": 13,
+        "phAdjustPercent": 0,
+        "conductivityAdjustPercent": 0
     }
 }
