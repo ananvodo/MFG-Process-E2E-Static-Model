@@ -1,7 +1,7 @@
 {
     "Bioreactor": {
         "prodDays": 18,
-        "titer": 0.5,
+        "titer": 0.6,
         "vvd": 2,
         "volume": 900,
         "bleedPercent": 0
@@ -22,5 +22,110 @@
         "stopLowVolumePercent": 13,
         "phAdjustPercent": 0,
         "conductivityAdjustPercent": 0
+    },
+    "ProaGuardFilter": {
+        "type": "SHC XLT10",
+        "partNumber": "KHGEG1TTT1",
+        "area": 0.54,
+        "quantity": 1,
+        "loading": 30000,
+        "flowPercentCompensation": 15
+    },
+    "Proa": {
+        "resin": {
+            "name": "MabSlect SuRe",
+            "cost": 17000,
+            "targetLoad": 40,
+            "maxLoad": 45,
+            "primeLoad": null
+        },
+        "column": {
+            "innerDiam": 20,
+            "bedHeight": 10,
+            "numberOfCols": 3
+        },
+        "steps": [
+            {
+                "name": "EQ",
+                "linearVel": 95,
+                "bufferName": "25mM Tris, 100mM NaCl",
+                "bufferCost": 0.20,
+                "cvs": 5
+            },
+            {
+                "name": "Loading",
+                "linearVel": null,
+                "bufferName": "HCCF",
+                "bufferCost": 0.20,
+                "cvs": null
+            },
+            {
+                "name": "Wash 1",
+                "linearVel": 95,
+                "bufferName": "25mM Tris, 100mM NaCl",
+                "bufferCost": 0.20,
+                "cvs": 3
+            },
+            {
+                "name": "Wash 2",
+                "linearVel": 95,
+                "bufferName": "50mM MES 1M CaCl2",
+                "bufferCost": 0.20,
+                "cvs": 3
+            },
+            {
+                "name": "Wash 3",
+                "linearVel": 95,
+                "bufferName": "25mM Tris, 100mM NaCl",
+                "bufferCost": 0.20,
+                "cvs": 3
+            },
+            {
+                "name": "Elution",
+                "linearVel": 95,
+                "bufferName": "100mM Acetate",
+                "bufferCost": 0.20,
+                "cvs": 4
+            },
+            {
+                "name": "Strip",
+                "linearVel": 95,
+                "bufferName": "100mM Acetic Acid",
+                "bufferCost": 0.20,
+                "cvs": 3
+            },
+            {
+                "name": "Flush",
+                "linearVel": 95,
+                "bufferName": "25mM Tris, 100mM NaCl",
+                "bufferCost": 0.20,
+                "cvs": 3
+            },
+            {
+                "name": "Sanitization 3a",
+                "linearVel": 95,
+                "bufferName": "100 mM Sodium Hydroxide",
+                "bufferCost": 0.20,
+                "cvs": 3,
+                "holdTime": 20
+            },
+            {
+                "name": "Sanitization 3b",
+                "linearVel": 95,
+                "bufferName": "100 mM Sodium Hydroxide",
+                "bufferCost": 0.20,
+                "cvs": 2,
+                "holdTime": null
+            },
+            {
+                "name": "Storage",
+                "linearVel": 95,
+                "bufferName": "2% (v/v) Benzyl Alcohol 50mM Citriate",
+                "bufferCost": 0.20,
+                "cvs": 3,
+                "holdTime": null
+            }
+        ],
+        "efficiency": 95
     }
 }

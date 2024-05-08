@@ -8,7 +8,10 @@ class Bioreactor():
         vvd: int,
         bleedPercent: float
     ) -> None:
-
+        # -------------------------------------
+        # User defined attributes
+        # -------------------------------------
+        # BRX design parameters
         self.prodDays = prodDays  # number of days to produce
         self.titer = titer  # g/L of BRX
         self.volume = volume  # in L

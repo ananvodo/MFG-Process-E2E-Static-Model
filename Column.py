@@ -3,14 +3,16 @@ import math
 
 class Column():
 
-    def __init__(self, name, innerDiam, bedHeight, maxPorteinLoad, targetProteinLoad, numberOfCols, loadLv):
-        self.name = name
+    def __init__(
+        self,
+        innerDiam: float,
+        bedHeight: float,
+        numberOfCols: int,
+    ) -> None:
+
         self.innerDiam = innerDiam
         self.bedHeight = bedHeight
-        self.maxProteinLoad = maxPorteinLoad
-        self.targetProteinLoad = targetProteinLoad
         self.numberOfCols = numberOfCols
-        self.loadLv = loadLv
         self.colVol = math.pi * (self.innerDiam/2) ^ 2 * self.bedHeight
 
         return None

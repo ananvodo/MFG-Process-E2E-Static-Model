@@ -11,7 +11,10 @@ class PerfusionFilter():
         surfaceArea: float,
         targetShearRate: float
     ) -> None:
+        # -------------------------------------
         # User defined attributes
+        # -------------------------------------
+        # Filter design parameters
         self.innerDiam = innerDiam  # cm
         self.length = length  # cm
         self.surfaceArea = surfaceArea  # cm^2
@@ -21,14 +24,17 @@ class PerfusionFilter():
         self.targetRecicFlow: float = (self.targetShearRate * self.numberOfLumen * (
             math.pi * ((self.innerDiam / 2) ** 3))) * Convert.MPS_TO_LPH.value / 4  # L/h
 
+        # -------------------------------------
         # Calculated attributes
-        self.inflow: float = 0
+        # -------------------------------------
+        # Flows
+        self.inFlow: float = 0
         self.outFlow: float = 0
 
         return None
 
     def provide_flows(self, inflow: float) -> None:
-        self.inflow = inflow
+        self.inFlow = inflow
         self.outFlow = inflow
 
         return None

@@ -20,7 +20,7 @@ class Susv(ABC):
         # User defined attributes
         # -------------------------------------
         # Process parameters
-        self.designVolume = designVolume  # in L. This is the working volume of the SUSV
+        self.designVolume = designVolume  # in L. This is the max design volume of the SUSV
         self.phAdjustPercent = phAdjustPercent
         self.conductivityAdjustPercent = conductivityAdjustPercent
         self.flowPercentCompensation = flowPercentCompensation
@@ -45,7 +45,7 @@ class Susv(ABC):
         # Flows
         self.inFlow: float = 0
         self.lowOutFlow: float = 0
-        self.normalOutflow: float = 0
+        self.normalOutFlow: float = 0
         self.highOutFlow: float = 0
 
         # Residence times
@@ -94,11 +94,11 @@ class ContinuousSusv(Susv):
 
     def provide_flows(self, inflow: float):
         self.inFlow: float = inflow
-        self.normalOutflow: float = self.inFlow
+        self.normalOutFlow: float = self.inFlow
 
-        self.lowOutFlow: float = self.normalOutflow * \
+        self.lowOutFlow: float = self.normalOutFlow * \
             (1 - self.flowPercentCompensation / 100)
-        self.highOutFlow: float = self.normalOutflow * \
+        self.highOutFlow: float = self.normalOutFlow * \
             (1 + self.flowPercentCompensation / 100)
 
         self.stopHighRt: float = self.stopHighVolume / self.inFlow
@@ -139,13 +139,13 @@ class SemiContinuousSusv(Susv):
         return None
 
     def provide_flows(self, inflow: float, outFlow: float | None = None):
-        self.inflow: float = inflow * \
+        self.inFlow: float = inflow * \
             (1 + self.phAdjustPercent / 100 + self.conductivityAdjustPercent / 100)
-        self.normalOutflow: float = self.inFlow * \
+        self.normalOutFlow: float = self.inFlow * \
             (1 + self.phAdjustPercent / 100 + self.conductivityAdjustPercent / 100)
-        self.lowOutFlow: float = self.normalOutflow * \
+        self.lowOutFlow: float = self.normalOutFlow * \
             (1 - self.flowPercentCompensation)
-        self.highOutFlow: float = self.normalOutflow * \
+        self.highOutFlow: float = self.normalOutFlow * \
             (1 + self.flowPercentCompensation)
 
         return None
