@@ -37,13 +37,19 @@ class ChromStep(ABC):
 
         return None
 
+    def __str__(self):
+        return (f"{self.__class__.__name__}(name={self.name}, linearVel={self.linearVel}, "
+                f"bufferName={self.bufferName}, bufferCost={self.bufferCost}, cvs={self.cvs}, "
+                f"holdTime={self.holdTime}, flow={self.flow}, rt={self.rt}, time={self.time}, "
+                f"volume={self.volume}, cvs={self.cvs})")
+
     @abstractmethod
     def calc_params(self, ):
 
         return None
 
 
-class LoadStep(ChromStep):
+class ProaLoadStep(ChromStep):
 
     def __init__(
         self,
@@ -84,6 +90,14 @@ class LoadStep(ChromStep):
 
         return None
 
+    def __str__(self):
+        return (f"{self.__class__.__name__}(name={self.name}, bufferName={self.bufferName}, bufferCost={self.bufferCost}, "
+                f"cvs={self.cvs}, holdTime={self.holdTime}, loadMass={self.loadMass}, volume={self.volume}, "
+                f"lowFlow={self.lowFlow}, flow={self.flow}, hihgFlow={self.hihgFlow}, "
+                f"lowFlowLinearVel={self.lowFlowLinearVel}, linearVel={self.linearVel}, highFlowLinearVel={self.highFlowLinearVel}, "
+                f"lowFlowRt={self.lowFlowRt}, rt={self.rt}, highflowRt={self.highflowRt}, "
+                f"lowFlowTime={self.lowFlowTime}, time={self.time}, highFlowTime={self.highFlowTime})")
+
     def calc_params(
         self,
         inflow: float,  # in L/h
@@ -94,9 +108,9 @@ class LoadStep(ChromStep):
         titer: float,  # in g/L
     ) -> None:
 
-        self.lowFlow = inflow * (1 - flowPercentCompensation)
+        self.lowFlow = inflow * (1 - flowPercentCompensation / 100)
         self.flow = inflow
-        self.hihgFlow = inflow * (1 + flowPercentCompensation)
+        self.hihgFlow = inflow * (1 + flowPercentCompensation / 100)
 
         self.lowFlowLinearVel = self.lowFlow * Convert.LITERS_TO_MILLILITERS.value / \
             (math.pi * ((colInnerDiam / 2) ** 2))
@@ -125,7 +139,7 @@ class LoadStep(ChromStep):
         return None
 
 
-class BufferStep(ChromStep):
+class ProaBufferStep(ChromStep):
 
     def __init__(
         self,
@@ -147,6 +161,9 @@ class BufferStep(ChromStep):
         )
 
         return None
+
+    def __str__(self):
+        return super().__str__()
 
     def calc_params(
         self,

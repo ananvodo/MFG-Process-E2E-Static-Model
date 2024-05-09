@@ -1,7 +1,7 @@
 {
     "Bioreactor": {
         "prodDays": 18,
-        "titer": 0.6,
+        "titer": 0.5,
         "vvd": 2,
         "volume": 900,
         "bleedPercent": 0
@@ -42,7 +42,7 @@
         "column": {
             "innerDiam": 20,
             "bedHeight": 10,
-            "numberOfCols": 3
+            "quantity": 3
         },
         "steps": [
             {

@@ -1,4 +1,7 @@
-class Bioreactor():
+from Equipment import Equipment
+
+
+class Bioreactor(Equipment):
 
     def __init__(
         self,
@@ -23,4 +26,7 @@ class Bioreactor():
             (1 + self.bleedPercent)  # in L/h. Media flowrate
         self.bleedFlow: float = self.outFlow * self.bleedPercent
 
+        return None
+
+    def provide_flows(self) -> None:
         return None

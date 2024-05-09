@@ -1,9 +1,10 @@
 from ChromResin import ProaChromResin
 from ChromStep import ChromStep
 from Column import ProaSbmColumn
+from Equipment import Equipment
 
 
-class Proa():
+class Proa(Equipment):
 
     def __init__(
         self,
@@ -24,8 +25,29 @@ class Proa():
 
         return None
 
-    def provide_flow(self, inflow: float, flowPercentCompensation: float) -> None:
+    def provide_flows(self, inflow: float, flowPercentCompensation: float) -> None:
         self.inFlow = inflow
         self.flowPercentCompensation = flowPercentCompensation
+
+        return None
+
+    def calculate_steps(self, titer: float) -> None:
+        for step in self.steps:
+
+            if step.name in ('Loading', 'Load', 'loading', 'load'):
+                step.calc_params(
+                    self.inFlow,
+                    self.flowPercentCompensation,
+                    self.column.volume,
+                    self.column.innerDiam,
+                    self.resin.targetLoad,
+                    titer
+                )
+
+            else:
+                step.calc_params(
+                    self.column.volume,
+                    self.column.innerDiam,
+                )
 
         return None

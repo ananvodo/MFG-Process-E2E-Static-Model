@@ -45,7 +45,7 @@ class Susv(ABC):
         # Flows
         self.inFlow: float = 0
         self.lowOutFlow: float = 0
-        self.normalOutFlow: float = 0
+        self.outFlow: float = 0  # This is the normal outflow
         self.highOutFlow: float = 0
 
         # Residence times
@@ -94,11 +94,11 @@ class ContinuousSusv(Susv):
 
     def provide_flows(self, inflow: float):
         self.inFlow: float = inflow
-        self.normalOutFlow: float = self.inFlow
+        self.outFlow: float = self.inFlow
 
-        self.lowOutFlow: float = self.normalOutFlow * \
+        self.lowOutFlow: float = self.outFlow * \
             (1 - self.flowPercentCompensation / 100)
-        self.highOutFlow: float = self.normalOutFlow * \
+        self.highOutFlow: float = self.outFlow * \
             (1 + self.flowPercentCompensation / 100)
 
         self.stopHighRt: float = self.stopHighVolume / self.inFlow

@@ -15,6 +15,10 @@ class ChromResin():
 
         return None
 
+    def __str__(self):
+        return (f"{self.__class__.__name__}(name={self.name}, cost={self.cost}, "
+                f"targetLoad={self.targetLoad}, maxLoad={self.maxLoad})")
+
 
 class ProaChromResin(ChromResin):
 
@@ -33,7 +37,11 @@ class ProaChromResin(ChromResin):
             targetLoad=targetLoad,
             maxLoad=maxLoad,
         )
-
         self.primeLoad = primeLoad
 
         return None
+
+    def __str__(self):
+        prime_load = self.primeLoad if self.primeLoad is not None else "N/A"
+        return (f"{self.__class__.__name__}(name={self.name}, cost={self.cost}, "
+                f"targetLoad={self.targetLoad}, maxLoad={self.maxLoad}, primeLoad={prime_load})")

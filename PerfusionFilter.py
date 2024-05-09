@@ -1,8 +1,9 @@
 import math
+from Equipment import Equipment
 from UnitConverter import UnitConverter as Convert
 
 
-class PerfusionFilter():
+class PerfusionFilter(Equipment):
 
     def __init__(
         self,

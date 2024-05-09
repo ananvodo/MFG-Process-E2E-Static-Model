@@ -1,7 +1,8 @@
+from Equipment import Equipment
 from UnitConverter import UnitConverter as Convert
 
 
-class GuardFilter():
+class GuardFilter(Equipment):
 
     def __init__(
         self,
