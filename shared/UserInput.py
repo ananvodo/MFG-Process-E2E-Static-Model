@@ -1,7 +1,7 @@
 import json
 
 
-class FileInput():
+class UserInput():
 
     def __init__(self, filename: str) -> None:
 

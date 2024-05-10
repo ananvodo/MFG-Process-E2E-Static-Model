@@ -1,9 +1,16 @@
-from Equipment import Equipment
-from UnitConverter import UnitConverter as Convert
+from abc import abstractmethod
+from typing import Literal
+from equipment.Equipment import Equipment
+from shared.UnitConverter import UnitConverter as Convert
+
+#########################################################################################################
+# CLASS
+#########################################################################################################
 
 
 class GuardFilter(Equipment):
-
+    # -------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
         type: str,
@@ -41,6 +48,30 @@ class GuardFilter(Equipment):
         self.changeoutTime: float = 0  # days
 
         return None
+    # -------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
+
+    def __str__(self) -> str:
+        return f'''
+        {self.__class__.__name__}(
+            type: {self.type}
+            partNumber: {self.partNumber}
+            area: {self.area}
+            quantity: {self.quantity}
+            loading: {self.loading}
+            flowPercentCompensation: {self.flowPercentCompensation}
+            totalArea: {self.totalArea}
+            processVolume: {self.processVolume}
+            inFlow: {self.inFlow}
+            outFlow: {self.outFlow}
+            normalFlux: {self.normalFlux}
+            lowFlux: {self.lowFlux}
+            hihgFlux: {self.hihgFlux}
+            processTime: {self.processTime}
+            changeoutTime: {self.changeoutTime}
+        )
+        '''
+    # -------------------------------------------------------------------------------------------------
 
     def provide_flows(self, inflow: float) -> None:
         self.inFlow = inflow

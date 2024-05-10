@@ -6,35 +6,28 @@ Created on Fri May  3 16:12:24 2024
 @author: avodopivec
 """
 
-from Input import FileInput
-from Reader import Reader
-from Bioreactor import Bioreactor
-from PerfusionFilter import PerfusionFilter
-from Proa import Proa
-from ChromStep import ProaBufferStep
-from Column import ProaSbmColumn
-from ChromResin import ProaChromResin
-from Susv import ContinuousSusv
-from GuardFilter import GuardFilter
+from equipment.chrom.Proa import Proa
+from equipment.guard_filter.ProaGuardFilter import ProaGuardFilter
+from equipment.perfusion_filter.PerfusionFilter import PerfusionFilter
+from equipment.susv.ContinuousSusv import ContinuousSusv
+from shared.UserInput import UserInput
+from equipment.bioreactor.Bioreactor import Bioreactor
 
 
-data = FileInput('input.json').data
+data = UserInput('input.json').data
 
-bioreactor = Reader.read_no_nested_dict(data, 'Bioreactor', Bioreactor)
+bioreactor = Bioreactor.from_dictfile(data, 'Bioreactor')
 
-perfusionFilter = Reader.read_no_nested_dict(data, 'PerfusionFilter', PerfusionFilter)
+perfusionFilter = PerfusionFilter.from_dictfile(data, 'PerfusionFilter')
 perfusionFilter.provide_flows(bioreactor.outFlow)
 
-susv1 = Reader.read_no_nested_dict(data, 'Susv1', ContinuousSusv)
+susv1 = ContinuousSusv.from_dictfile(data, 'Susv1')
 susv1.provide_flows(perfusionFilter.outFlow)
 
-proaGuardFilter = Reader.read_no_nested_dict(data, 'ProaGuardFilter', GuardFilter)
+proaGuardFilter = ProaGuardFilter.from_dictfile(data, 'ProaGuardFilter')
 proaGuardFilter.provide_flows(susv1.outFlow)
 
-proa = Reader.read_proa(data, 'Proa')
-proa.provide_flows(susv1.outFlow, susv1.flowPercentCompensation)
-proa.calculate_steps(bioreactor.titer)
-steps = proa.steps[1]
-resin = proa.resin
-column = proa.column
-print(steps)
+proa = Proa.from_dictfile(data, 'Proa')
+proa.provide_flows(susv1.outFlow)
+proa.calculate_steps(bioreactor.titer, susv1.flowPercentCompensation)
+steps = proa.steps
