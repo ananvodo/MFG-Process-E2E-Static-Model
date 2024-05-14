@@ -1,32 +1,23 @@
-from typing import Literal
-from equipment.guard_filter.GuardFilter import GuardFilter
+from process_params.Params import Params
 
 #########################################################################################################
 # CLASS
 #########################################################################################################
 
 
-class ProaGuardFilter(GuardFilter):
+class SusvParams(Params):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
-        type: str,
-        partNumber: str,
-        area: float,
-        quantity: int,
-        loading: float,
-        flowPercentCompensation: float
+        designVolume: float,
+        phAdjustPercent: float,
+        conductivityAdjustPercent: float
     ) -> None:
 
-        super().__init__(
-            type=type,
-            partNumber=partNumber,
-            area=area,
-            quantity=quantity,
-            loading=loading,
-            flowPercentCompensation=flowPercentCompensation
-        )
+        self.designVolume = designVolume
+        self.phAdjustPercent = phAdjustPercent
+        self.conductivityAdjustPercent = conductivityAdjustPercent
 
         return None
     # -------------------------------------------------------------------------------------------------
@@ -36,14 +27,16 @@ class ProaGuardFilter(GuardFilter):
     def from_dictfile(
         cls,
         data: dict[str, str | float | int],
-        key: Literal['ProaGuardFilter', 'proaGuarFilter'] = 'ProaGuardFilter'
-    ) -> 'ProaGuardFilter':
+        key: str
+    ) -> 'SusvParams':
 
         return super().from_dictfile(data, key)
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
 
-    def provide_flows(self, inflow: float) -> None:
-        super().provide_flows(inflow)
-
-        return None
+    def __str__(self) -> str:
+        return f'''
+        {self.__class__.__name__}:
+            designVolume = {self.designVolume},
+            phAdjustPercent = {self.phAdjustPercent},
+            conductivityAdjustPercent = {self.conductivityAdjustPercent}'''

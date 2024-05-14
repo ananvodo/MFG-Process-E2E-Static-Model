@@ -1,6 +1,6 @@
 import math
 
-from shared.InstantiatorMixin import InstantiatorMixin
+from process_params.Params import Params
 from shared.UnitConverter import UnitConverter as Convert
 
 #########################################################################################################
@@ -8,7 +8,7 @@ from shared.UnitConverter import UnitConverter as Convert
 #########################################################################################################
 
 
-class Column(InstantiatorMixin):
+class ChromColumnParams(Params):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
@@ -25,15 +25,25 @@ class Column(InstantiatorMixin):
             self.bedHeight * Convert.MILLILITERS_TO_LITERS.value  # in L
 
         return None
+
+    # -------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def from_dictfile(
+        cls,
+        data: dict[str, str | float | int],
+        key: str = 'column'
+    ) -> 'ChromColumnParams':
+
+        return super().from_dictfile(data, key)
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
 
     def __str__(self) -> str:
         return f'''
-        {self.__class__.__name__}(
+        {self.__class__.__name__}:
             innerDiam: {self.innerDiam}
             bedHeight: {self.bedHeight}
             quantity: {self.quantity}
-            volume: {self.volume}
-        )
-        '''
+            volume: {self.volume}'''

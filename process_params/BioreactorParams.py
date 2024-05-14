@@ -1,12 +1,13 @@
 from typing import Literal
-from equipment.Equipment import Equipment
+
+from process_params.Params import Params
 
 #########################################################################################################
 # CLASS
 #########################################################################################################
 
 
-class Bioreactor(Equipment):
+class BioreactorParams(Params):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
@@ -41,7 +42,7 @@ class Bioreactor(Equipment):
         cls,
         data: dict[str, str | float | int],
         key: Literal['Bioreactor', 'bioreactor'] = 'Bioreactor'
-    ) -> 'Bioreactor':
+    ) -> 'BioreactorParams':
 
         return super().from_dictfile(data, key)
     # -------------------------------------------------------------------------------------------------
@@ -49,7 +50,7 @@ class Bioreactor(Equipment):
 
     def __str__(self) -> str:
         return f'''
-        {self.__class__.__name__}(
+        {self.__class__.__name__}:
             prodDays: {self.prodDays}
             titer: {self.titer}
             volume: {self.volume}
@@ -57,15 +58,4 @@ class Bioreactor(Equipment):
             bleedPercent: {self.bleedPercent}
             outFlow: {self.outFlow}
             inFlow: {self.inFlow}
-            bleedFlow: {self.bleedFlow}
-        )
-        '''
-    # -------------------------------------------------------------------------------------------------
-    # -------------------------------------------------------------------------------------------------
-
-    def provide_flows(self) -> None:
-        '''
-        The Bioreactor does not need to provide flows.
-        This is a dummy method to satisfy the Equipment class.
-        '''
-        return None
+            bleedFlow: {self.bleedFlow}'''

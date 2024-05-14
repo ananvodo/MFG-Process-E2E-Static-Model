@@ -1,25 +1,29 @@
-from shared.InstantiatorMixin import InstantiatorMixin
+from process_params.Params import Params
 
 #########################################################################################################
 # CLASS
 #########################################################################################################
 
 
-class ChromResin(InstantiatorMixin):
+class GuardFilterParams(Params):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
-        name: str,
-        cost: float,
-        targetLoad: float,
-        maxLoad: float,
+        type: str,
+        partNumber: str,
+        area: float,
+        quantity: int,
+        loading: float,
     ) -> None:
 
-        self.name = name
-        self.cost = cost
-        self.targetLoad = targetLoad
-        self.maxLoad = maxLoad
+        self.type = type  # This is the type of filter
+        self.partNumber = partNumber  # This is the part number of the filter
+        self.area = area  # in m^2
+        self.quantity = quantity  # This is the number of filters in the system
+        self.loading = loading  # Volume loaded in the filter in L/m^2
+        self.totalArea = self.quantity * self.area  # m^2
+        self.processVolume = self.totalArea * self.loading
 
         return None
     # -------------------------------------------------------------------------------------------------
@@ -29,19 +33,21 @@ class ChromResin(InstantiatorMixin):
     def from_dictfile(
         cls,
         data: dict[str, str | float | int],
-        key: str = 'resin'
-    ) -> 'ChromResin':
+        key: str
+    ) -> 'GuardFilterParams':
 
         return super().from_dictfile(data, key)
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'''
-        {self.__class__.__name__}(
-            name: {self.name}
-            cost: {self.cost}
-            targetLoad: {self.targetLoad}
-            maxLoad: {self.maxLoad}
-        )
+        {self.__class__.__name__}:
+            type: {self.type}
+            partNumber: {self.partNumber}
+            area: {self.area}
+            quantity: {self.quantity}
+            loading: {self.loading}
+            totalArea: {self.totalArea}
+            processVolume: {self.processVolume}
         '''

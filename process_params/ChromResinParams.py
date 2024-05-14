@@ -1,12 +1,11 @@
+from process_params.Params import Params
+
 #########################################################################################################
 # CLASS
 #########################################################################################################
 
 
-from process_support.resin.ChromResin import ChromResin
-
-
-class ProaChromResin(ChromResin):
+class ChromResinParams(Params):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
@@ -15,24 +14,32 @@ class ProaChromResin(ChromResin):
         cost: float,
         targetLoad: float,
         maxLoad: float,
-        primeLoad: float | None = None,
     ) -> None:
 
-        super().__init__(
-            name=name,
-            cost=cost,
-            targetLoad=targetLoad,
-            maxLoad=maxLoad,
-        )
-        self.primeLoad = primeLoad
+        self.name = name
+        self.cost = cost
+        self.targetLoad = targetLoad
+        self.maxLoad = maxLoad
 
         return None
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
 
+    @classmethod
+    def from_dictfile(
+        cls,
+        data: dict[str, str | float | int],
+        key: str = 'resin'
+    ) -> 'ChromResinParams':
+
+        return super().from_dictfile(data, key)
+    # -------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
+
     def __str__(self):
-        primeLoad = self.primeLoad if self.primeLoad is not None else "N/A"
-        return f'''{super().__str__()},
-            primeLoad: {primeLoad}
-        )
-        '''
+        return f'''
+        {self.__class__.__name__}:
+            name: {self.name}
+            cost: {self.cost}
+            targetLoad: {self.targetLoad}
+            maxLoad: {self.maxLoad}'''

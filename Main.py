@@ -6,28 +6,54 @@ Created on Fri May  3 16:12:24 2024
 @author: avodopivec
 """
 
-from equipment.chrom.Proa import Proa
-from equipment.guard_filter.ProaGuardFilter import ProaGuardFilter
-from equipment.perfusion_filter.PerfusionFilter import PerfusionFilter
-from equipment.susv.ContinuousSusv import ContinuousSusv
+from equipment.Bioreactor import Bioreactor
+from equipment.GuardFilterDiscr import GuardFilterDiscr
+from equipment.PerfusionFilter import PerfusionFilter
+from equipment.Proa import Proa
+from equipment.SusvDiscr import SusvDiscr
+from process_params.BioreactorParams import BioreactorParams
+from process_params.GuardFilterParams import GuardFilterParams
+from process_params.PerfusionFilterParams import PerfusionFilterParams
+from process_params.ProaParams import ProaParams
+from process_params.SusvDiscrParams import SusvDiscrParams
 from shared.UserInput import UserInput
-from equipment.bioreactor.Bioreactor import Bioreactor
 
 
 data = UserInput('input.json').data
 
-bioreactor = Bioreactor.from_dictfile(data, 'Bioreactor')
+# Getting all the parameters from the input file
+bioreactorParams = BioreactorParams.from_dictfile(data, 'Bioreactor')
+perfusionFilterParams = PerfusionFilterParams.from_dictfile(
+    data, 'PerfusionFilter')
+susv1Params = SusvDiscrParams.from_dictfile(data, 'Susv1')
+proaGuardFilterParams = GuardFilterParams.from_dictfile(
+    data, 'ProaGuardFilter')
+proaParams = ProaParams.from_dictfile(data, 'Proa')
 
-perfusionFilter = PerfusionFilter.from_dictfile(data, 'PerfusionFilter')
-perfusionFilter.provide_flows(bioreactor.outFlow)
+# Getting the data from the parameters
+bioreactor = Bioreactor.from_params(
+    bioreactorParams=bioreactorParams
+)
+perfusionFilter = PerfusionFilter.from_params(
+    bioreactor=bioreactor,
+    perfusionFilterParams=perfusionFilterParams
+)
+susv1 = SusvDiscr.from_params(
+    susvDiscrParams=susv1Params,
+    perfusionFilter=perfusionFilter,
+)
 
-susv1 = ContinuousSusv.from_dictfile(data, 'Susv1')
-susv1.provide_flows(perfusionFilter.outFlow)
+proaGuardFilter = GuardFilterDiscr.from_params(
+    guardFilterDiscrParams=proaGuardFilterParams,
+    susvDiscr=susv1
+)
 
-proaGuardFilter = ProaGuardFilter.from_dictfile(data, 'ProaGuardFilter')
-proaGuardFilter.provide_flows(susv1.outFlow)
-
-proa = Proa.from_dictfile(data, 'Proa')
-proa.provide_flows(susv1.outFlow)
-proa.calculate_steps(bioreactor.titer, susv1.flowPercentCompensation)
-steps = proa.steps
+proa = Proa.from_params(
+    proaParams=proaParams
+)
+proa.calculate_loading(
+    proaParams=proaParams,
+    susvDiscr=susv1,
+    bioreactorParams=bioreactorParams
+)
+print(proa)

@@ -1,6 +1,6 @@
 import math
 from typing import Literal
-from equipment.Equipment import Equipment
+from process_params.Params import Params
 from shared.UnitConverter import UnitConverter as Convert
 
 #########################################################################################################
@@ -8,7 +8,7 @@ from shared.UnitConverter import UnitConverter as Convert
 #########################################################################################################
 
 
-class PerfusionFilter(Equipment):
+class PerfusionFilterParams(Params):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
@@ -31,30 +31,19 @@ class PerfusionFilter(Equipment):
         self.targetRecicFlow: float = (self.targetShearRate * self.numberOfLumen * (
             math.pi * ((self.innerDiam / 2) ** 3))) * Convert.MPS_TO_LPH.value / 4  # L/h
 
-        # -------------------------------------
-        # Calculated attributes
-        # -------------------------------------
-        # Flows
-        self.inFlow: float = 0
-        self.outFlow: float = 0
-
         return None
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
 
     def __str__(self) -> str:
         return f'''
-        {self.__class__.__name__}(
+        {self.__class__.__name__}:
             innerDiam: {self.innerDiam}
             length: {self.length}
             surfaceArea: {self.surfaceArea}
             targetShearRate: {self.targetShearRate}
             numberOfLumen: {self.numberOfLumen}
-            targetRecicFlow: {self.targetRecicFlow}
-            inFlow: {self.inFlow}
-            outFlow: {self.outFlow}
-        )
-        '''
+            targetRecicFlow: {self.targetRecicFlow}'''
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
 
@@ -63,14 +52,6 @@ class PerfusionFilter(Equipment):
         cls,
         data: dict[str, str | float | int],
         key: Literal['PerfusionFilter', 'perfusionFilter'] = 'PerfusionFilter'
-    ) -> 'PerfusionFilter':
+    ) -> 'PerfusionFilterParams':
 
         return super().from_dictfile(data, key)
-    # -------------------------------------------------------------------------------------------------
-    # -------------------------------------------------------------------------------------------------
-
-    def provide_flows(self, inflow: float) -> None:
-        self.inFlow = inflow
-        self.outFlow = inflow
-
-        return None
