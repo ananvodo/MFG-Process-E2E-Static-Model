@@ -25,7 +25,9 @@ class LoadProaChromStep(Equipment):
         flowType: Literal['low', 'normal', 'high'] | None,
         loadMass: float,
         linearVel: float,
-        cvs: float
+        cvs: float,
+        cyclesPerDay: float,
+        cyclesPerDayPerColumn: float,
     ) -> None:
 
         self.flow = flow  # in L/h
@@ -36,6 +38,8 @@ class LoadProaChromStep(Equipment):
         self.loadMass = loadMass  # in g
         self.linearVel = linearVel  # in cm/h
         self.cvs = cvs
+        self.cyclesPerDay = cyclesPerDay  # in cycles/day
+        self.cyclesPerDayPerColumn = cyclesPerDayPerColumn  # in cycles/day/column
 
         return None
 
@@ -61,10 +65,14 @@ class LoadProaChromStep(Equipment):
         loadMass = chromColumnParams.volume * chromResinParams.targetLoad  # in g
         volume = loadMass / bioreactorParams.titer  # in L
         cvs = volume / chromColumnParams.volume
+        cyclesPerDay = 1 / \
+            (time * Convert.MINUTES_TO_DAYS.value)  # in cycles/day
+        cyclesPerDayPerColumn = cyclesPerDay / \
+            chromColumnParams.quantity  # in cycles/day/column
 
         # Create an instance of the class
-        instance = cls(flow, rt, time, volume, flowType,
-                       loadMass, linearVel, cvs)
+        instance = cls(flow, rt, time, volume, flowType, loadMass,
+                       linearVel, cvs, cyclesPerDay, cyclesPerDayPerColumn)
         # Calling load_params on the instance
         instance.load_params(chromStepParams)
 
@@ -92,4 +100,6 @@ class LoadProaChromStep(Equipment):
             flowType: {self.flowType}
             loadMass: {self.loadMass}
             linearVel: {self.linearVel}
-            cvs: {self.cvs}'''
+            cvs: {self.cvs}
+            cyclesPerDay: {self.cyclesPerDay}
+            cyclesPerDayPerColumn: {self.cyclesPerDayPerColumn}'''
