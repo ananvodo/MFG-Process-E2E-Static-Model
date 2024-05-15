@@ -127,10 +127,11 @@
         "efficiency": 95
     },
     "VI": {
-        "stopHighVolumePercent": 200,
-        "highVolumePercent": 180,
-        "lowVolumePercent": 87,
-        "stopLowVolumePercent": 13,
+        "highHighvolumeCompPercent": 200,
+        "upsLowFlowCompPercent": 180,
+        "highLevelCompPercent": 87,
+        "LowLevelPercent": 97,
+        "lowLowLevelCompPercent": 97,
         "minWorkinfVolume": 15,
         "acidAdditionPercent": 3.2,
         "baseAdditionPercent": 10,
