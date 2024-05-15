@@ -49,5 +49,4 @@ class GuardFilterParams(Params):
             quantity: {self.quantity}
             loading: {self.loading}
             totalArea: {self.totalArea}
-            processVolume: {self.processVolume}
-        '''
+            processVolume: {self.processVolume}'''

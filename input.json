@@ -125,5 +125,18 @@
             }
         ],
         "efficiency": 95
+    },
+    "VI": {
+        "stopHighVolumePercent": 200,
+        "highVolumePercent": 180,
+        "lowVolumePercent": 87,
+        "stopLowVolumePercent": 13,
+        "minWorkinfVolume": 15,
+        "acidAdditionPercent": 3.2,
+        "baseAdditionPercent": 10,
+        "acidBuffer": "2M Acetic Acid",
+        "baseBuffer": "2M Tris",
+        "efficiency": 95,
+        "reactionTime": 3
     }
 }

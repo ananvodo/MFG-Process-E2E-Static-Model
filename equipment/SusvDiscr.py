@@ -42,7 +42,7 @@ class SusvDiscr(Equipment):
 
     def __init__(
         self,
-        process: Process,
+        process: list[Process],
     ) -> None:
 
         self.process = process

@@ -6,11 +6,13 @@ Created on Fri May  3 16:12:24 2024
 @author: avodopivec
 """
 
+from equipment.Vi import Vi
 from equipment.Bioreactor import Bioreactor
 from equipment.GuardFilterDiscr import GuardFilterDiscr
 from equipment.PerfusionFilter import PerfusionFilter
 from equipment.Proa import Proa
 from equipment.SusvDiscr import SusvDiscr
+from process_params.ViParams import ViParams
 from process_params.BioreactorParams import BioreactorParams
 from process_params.GuardFilterParams import GuardFilterParams
 from process_params.PerfusionFilterParams import PerfusionFilterParams
@@ -29,7 +31,7 @@ susv1Params = SusvDiscrParams.from_dictfile(data, 'Susv1')
 proaGuardFilterParams = GuardFilterParams.from_dictfile(
     data, 'ProaGuardFilter')
 proaParams = ProaParams.from_dictfile(data, 'Proa')
-
+viParams = ViParams.from_dictfile(data, 'VI')
 # Getting the data from the parameters
 bioreactor = Bioreactor.from_params(
     bioreactorParams=bioreactorParams
@@ -56,4 +58,10 @@ proa.calculate_loading(
     susvDiscr=susv1,
     bioreactorParams=bioreactorParams
 )
-print(proa)
+
+vi = Vi.from_params(
+    viParams=viParams,
+    proa=proa,
+    bioreactorParams=bioreactorParams
+)
+print(vi)
