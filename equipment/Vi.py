@@ -20,14 +20,14 @@ class Vi(Equipment):
             time: float,
             cyclesPerDay: float,
             cyclesPerRun: float,
-            dischargeFlow: float,
+            outFlow: float,
             flowType: Literal['low', 'normal', 'high']
         ) -> None:
 
             self.time = time  # h
             self.cyclesPerDay = cyclesPerDay
             self.cyclesPerRun = cyclesPerRun
-            self.dischargeFlow = dischargeFlow  # h
+            self.outFlow = outFlow  # h
             self.flowType = flowType  # low, normal, high
 
             return None
@@ -38,7 +38,7 @@ class Vi(Equipment):
                 time: {self.time}
                 cyclesPerDay: {self.cyclesPerDay}
                 cyclesPerRun: {self.cyclesPerRun}
-                dischargeFlow: {self.dischargeFlow}
+                outFlow: {self.outFlow}
                 flowType: {self.flowType}'''
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ class Vi(Equipment):
             cyclesPerDay = 1 / \
                 (time * Convert.HOURS_TO_DAYS.value)  # cycles/day
             cyclesPerRun = bioreactorParams.prodDays * cyclesPerDay
-            dischargeFlow = volume / time  # L/h
+            outFlow = volume / time  # L/h
             flowType = step.flowType
 
             process.append(
@@ -98,7 +98,7 @@ class Vi(Equipment):
                     time=time,
                     cyclesPerDay=cyclesPerDay,
                     cyclesPerRun=cyclesPerRun,
-                    dischargeFlow=dischargeFlow,
+                    outFlow=outFlow,
                     flowType=flowType
                 )
             )
