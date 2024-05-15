@@ -15,6 +15,7 @@ class SusvDiscrParams(SusvParams):
         conductivityAdjustPercent: float,
         flowPercentCompensation: float,
         stopHighVolumePercent: float,
+        uspLowFlowCompensationPercent: float | None,  # not applied for SUSV1
         highVolumePercent: float,
         normalVolumePercent: float,
         lowVolumePercent: float,
@@ -26,24 +27,25 @@ class SusvDiscrParams(SusvParams):
             phAdjustPercent=phAdjustPercent,
             conductivityAdjustPercent=conductivityAdjustPercent
         )
-        self.flowPercentCompensation = flowPercentCompensation
+        self.flowPercentCompensation = flowPercentCompensation  # %
         self.flowType: list[str] = ['low', 'normal', 'high']
-        self.stopHighVolumePercent = stopHighVolumePercent
+        self.stopHighVolumePercent = stopHighVolumePercent  # %
+        self.uspLowFlowCompensationPercent = uspLowFlowCompensationPercent  # %
         self.highVolumePercent = highVolumePercent
         self.normalVolumePercent = normalVolumePercent
         self.lowVolumePercent = lowVolumePercent
         self.stopLowVolumePercent = stopLowVolumePercent
 
         self.stopHighVolume: float = self.designVolume * \
-            self.stopHighVolumePercent / 100
+            self.stopHighVolumePercent / 100  # L
         self.highVolume: float = self.designVolume * \
-            self.highVolumePercent / 100
+            self.highVolumePercent / 100  # L
         self.normalVolume: float = self.designVolume * \
-            self.normalVolumePercent / 100
+            self.normalVolumePercent / 100  # L
         self.lowVolume: float = self.designVolume * \
-            self.lowVolumePercent / 100
+            self.lowVolumePercent / 100  # L
         self.stopLowVolume: float = self.designVolume * \
-            self.stopLowVolumePercent / 100
+            self.stopLowVolumePercent / 100  # L
 
         return None
     # -------------------------------------------------------------------------------------------------
@@ -66,6 +68,7 @@ class SusvDiscrParams(SusvParams):
             flowPercentCompensation = {self.flowPercentCompensation},
             flowType = {self.flowType},
             stopHighVolumePercent = {self.stopHighVolumePercent},
+            uspLowFlowCompensationPercent = {self.uspLowFlowCompensationPercent},
             highVolumePercent = {self.highVolumePercent},
             normalVolumePercent = {self.normalVolumePercent},
             lowVolumePercent = {self.lowVolumePercent},

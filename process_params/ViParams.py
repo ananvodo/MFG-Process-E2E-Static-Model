@@ -11,10 +11,10 @@ class ViParams(Params):
     def __init__(
         self,
         stopHighVolumePercent: float,
-        upsLowFlowCompPercent: float,
-        highLevelCompPercent: float,
-        LowLevelPercent: float,
-        lowLowLevelCompPercent: float,
+        highVolumePercent: float,
+        uspLowFlowCompensationPercent: float,
+        lowVolumePercent: float,
+        stopLowVolumePercent: float,
         minWorkinfVolume: float,
         acidAdditionPercent: float,
         baseAdditionPercent: float,
@@ -25,10 +25,10 @@ class ViParams(Params):
     ) -> None:
 
         self.stopHighVolumePercent = stopHighVolumePercent  # %
-        self.upsLowFlowCompPercent = upsLowFlowCompPercent  # %
-        self.highLevelCompPercent = highLevelCompPercent  # %
-        self.LowLevelPercent = LowLevelPercent  # %
-        self.lowLowLevelCompPercent = lowLowLevelCompPercent  # %
+        self.uspLowFlowCompensationPercent = uspLowFlowCompensationPercent  # %
+        self.highVolumePercent = highVolumePercent  # %
+        self.lowVolumePercent = lowVolumePercent  # %
+        self.stopLowVolumePercent = stopLowVolumePercent  # %
         self.minWorkinfVolume = minWorkinfVolume  # L
         self.acidAdditionPercent = acidAdditionPercent  # %
         self.baseAdditionPercent = baseAdditionPercent  # %
@@ -41,12 +41,13 @@ class ViParams(Params):
         self.stopHighMass = self.minWorkinfVolume * \
             (1 + self.stopHighVolumePercent / 100)
         self.highMassUspSwitchLow = self.minWorkinfVolume * \
-            (1 + self.upsLowFlowCompPercent / 100)
+            (1 + self.uspLowFlowCompensationPercent / 100)
         self.highMass = self.minWorkinfVolume * \
-            (1 + self.highLevelCompPercent / 100)
-        self.LowMass = self.minWorkinfVolume * (1 - self.LowLevelPercent / 100)
+            (1 + self.highVolumePercent / 100)
+        self.LowMass = self.minWorkinfVolume * \
+            (1 - self.lowVolumePercent / 100)
         self.lowLowMass = self.minWorkinfVolume * \
-            (1 - self.lowLowLevelCompPercent / 100)
+            (1 - self.stopLowVolumePercent / 100)
 
         return None
 
