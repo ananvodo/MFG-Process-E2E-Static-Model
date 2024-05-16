@@ -18,6 +18,7 @@ class DepthFilterParams(Params):
         loading: float,
         bufferFlushLoading: float,
         bufferFlushFlux: float,
+        effiency: float
     ) -> None:
 
         self.type = type  # This is the type of filter
@@ -27,6 +28,7 @@ class DepthFilterParams(Params):
         self.loading = loading  # in L/m^2
         self.bufferFlushLoading = bufferFlushLoading  # in L/m^2
         self.bufferFlushFlux = bufferFlushFlux  # in L/m^2/h
+        self.effiency = effiency  # in %
 
         self.totalArea = self.quantity * self.area  # m^2
         self.bufferFlushVolume = self.totalArea * self.bufferFlushLoading  # in L

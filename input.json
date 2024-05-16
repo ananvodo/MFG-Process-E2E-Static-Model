@@ -160,6 +160,7 @@
         "quantity": 1,
         "loading": 400,
         "bufferFlushLoading": 30,
-        "bufferFlushFlux": 200
+        "bufferFlushFlux": 200,
+        "efficiency": 95
     }
 }
