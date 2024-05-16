@@ -14,8 +14,8 @@
     },
     "Susv1": {
         "stopHighVolumePercent": 95,
-        "highVolumePercent": 65,
         "uspLowFlowCompensationPercent": null,
+        "highVolumePercent": 65,
         "normalVolumePercent": 50,
         "lowVolumePercent": 35,
         "stopLowVolumePercent": 13,
@@ -139,6 +139,27 @@
         "acidBuffer": "2M Acetic Acid",
         "baseBuffer": "2M Tris",
         "efficiency": 95,
-        "reactionTime": 3
+        "reactionTime": 0
+    },
+    "Susv2": {
+        "stopHighVolumePercent": 95,
+        "uspLowFlowCompensationPercent": 84,
+        "highVolumePercent": 30,
+        "normalVolumePercent": 23,
+        "lowVolumePercent": 15,
+        "stopLowVolumePercent": 10,
+        "flowPercentCompensation": 15,
+        "designVolume": 200,
+        "phAdjustPercent": 0,
+        "conductivityAdjustPercent": 0
+    },
+    "DF1": {
+        "type": "X0SP",
+        "partNumber": "MX0SP05FS1",
+        "area": 1.1,
+        "quantity": 1,
+        "loading": 400,
+        "bufferFlushLoading": 30,
+        "bufferFlushFlux": 200
     }
 }

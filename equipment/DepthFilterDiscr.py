@@ -1,11 +1,17 @@
+import math
 from typing import Literal
 from equipment.Equipment import Equipment
 from equipment.SusvDiscr import SusvDiscr
-from process_params.GuardFilterParams import GuardFilterParams
+from process_params.BioreactorParams import BioreactorParams
+from process_params.DepthFilterParams import DepthFilterParams
 from shared.UnitConverter import UnitConverter as Convert
 
+#########################################################################################################
+# CLASS
+#########################################################################################################
 
-class GuardFilterDiscr(Equipment):
+
+class DepthFilterDiscr(Equipment):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     class Process():
@@ -16,6 +22,8 @@ class GuardFilterDiscr(Equipment):
             flux: float,
             processTime: float,
             changeoutTime: float,
+            quantityPerRun: int,
+
             flowType: Literal['low', 'normal', 'high']
         ) -> None:
 
@@ -24,6 +32,8 @@ class GuardFilterDiscr(Equipment):
             self.flux = flux  # L/m^2/h
             self.processTime = processTime  # h
             self.changeoutTime = changeoutTime  # days
+            self.changeoutTime = changeoutTime  # days
+            self.quantityPerRun = quantityPerRun  # number of filters for the operation
             self.flowType = flowType  # Options: 'low', 'normal', 'high'
 
             return None
@@ -36,15 +46,15 @@ class GuardFilterDiscr(Equipment):
                 flux: {self.flux}
                 processTime: {self.processTime}
                 changeoutTime: {self.changeoutTime}
+                quantityPerRun: {self.quantityPerRun}
                 flowType: {self.flowType}'''
 
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
-        process: Process
-    ) -> None:
-
+        process: list[Process],
+    ):
         self.process = process
 
         return None
@@ -54,9 +64,10 @@ class GuardFilterDiscr(Equipment):
     @classmethod
     def from_params(
         cls,
-        guardFilterDiscrParams: GuardFilterParams,
+        depthFilterParams: DepthFilterParams,
+        bioreactorParams: BioreactorParams,
         susvDiscr: SusvDiscr,
-    ) -> 'GuardFilterDiscr':
+    ) -> 'DepthFilterDiscr':
 
         process = []
 
@@ -64,9 +75,11 @@ class GuardFilterDiscr(Equipment):
             flowType = susv.flowType
             inFlow: float = susv.outFlow
             outFlow: float = susv.outFlow
-            flux: float = outFlow / guardFilterDiscrParams.totalArea
-            processTime: float = guardFilterDiscrParams.processVolume / outFlow
+            flux: float = outFlow / depthFilterParams.totalArea
+            processTime: float = depthFilterParams.processVolume / outFlow
             changeoutTime: float = processTime * Convert.HOURS_TO_DAYS.value  # days
+            quantityPerRun: int = math.ceil(
+                bioreactorParams.prodDays / (changeoutTime * depthFilterParams.quantity))
 
             process.append(cls.Process(
                 inFlow=inFlow,
@@ -74,13 +87,14 @@ class GuardFilterDiscr(Equipment):
                 flux=flux,
                 processTime=processTime,
                 changeoutTime=changeoutTime,
+                quantityPerRun=quantityPerRun,
                 flowType=flowType
             ))
 
         # Create an instance of the class
         instance = cls(process)
         # Now you can call load_params on the instance
-        instance.load_params(guardFilterDiscrParams)
+        instance.load_params(depthFilterParams)
 
         return instance
 
@@ -92,9 +106,13 @@ class GuardFilterDiscr(Equipment):
         type_ = getattr(self, 'type', None)
         partNumber = getattr(self, 'partNumber', None)
         area = getattr(self, 'area', None)
-        quantity = getattr(self, 'quantity', None)
+        quantityPerRun = getattr(self, 'quantityPerRun', None)
         loading = getattr(self, 'loading', None)
+        bufferFlushLoading = getattr(self, 'bufferFlushLoading', None)
+        bufferFlushFlux = getattr(self, 'bufferFlushFlux', None)
         totalArea = getattr(self, 'totalArea', None)
+        bufferFlushVolume = getattr(self, 'bufferFlushVolume', None)
+        bufferFlushTime = getattr(self, 'bufferFlushTime', None)
         processVolume = getattr(self, 'processVolume', None)
 
         return f'''
@@ -102,8 +120,12 @@ class GuardFilterDiscr(Equipment):
             type: {type_}
             partNumber: {partNumber}
             area: {area}
-            quantity: {quantity}
+            quantityPerRun: {quantityPerRun}
             loading: {loading}
+            bufferFlushLoading: {bufferFlushLoading}
+            bufferFlushFlux: {bufferFlushFlux}
             totalArea: {totalArea}
+            bufferFlushVolume: {bufferFlushVolume}
+            bufferFlushTime: {bufferFlushTime}
             processVolume: {processVolume}
             process:[\n{process_str}\n           ]'''

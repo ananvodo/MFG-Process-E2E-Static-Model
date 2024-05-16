@@ -55,10 +55,10 @@ class SusvDiscr(Equipment):
     def from_params(
         cls,
         susvDiscrParams: SusvDiscrParams,
-        perfusionFilter: PerfusionFilter
+        prevEquipment: Equipment
     ) -> 'SusvDiscr':
 
-        inFlow: float = perfusionFilter.outFlow * (1 + susvDiscrParams.phAdjustPercent / 100) * (
+        inFlow: float = prevEquipment.outFlow * (1 + susvDiscrParams.phAdjustPercent / 100) * (
             1 + susvDiscrParams.conductivityAdjustPercent / 100)
 
         process = []

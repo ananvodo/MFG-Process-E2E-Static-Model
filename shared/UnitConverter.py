@@ -9,3 +9,4 @@ class UnitConverter(Enum):
     MILLILITERS_TO_LITERS: float = 1 / 1000  # convert ml to L or cm3
     MINUTES_TO_DAYS: float = 1 / 1440  # days/minutes
     MINUTES_TO_HOURS: float = 1 / 60  # hours/minutes
+    HOURS_TO_SECONDS: float = 3600  # seconds/hours

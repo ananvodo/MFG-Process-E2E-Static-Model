@@ -20,6 +20,7 @@ class Vi(Equipment):
             time: float,
             cyclesPerDay: float,
             cyclesPerRun: float,
+            inFlow: float,
             outFlow: float,
             flowType: Literal['low', 'normal', 'high']
         ) -> None:
@@ -27,7 +28,8 @@ class Vi(Equipment):
             self.time = time  # h
             self.cyclesPerDay = cyclesPerDay
             self.cyclesPerRun = cyclesPerRun
-            self.outFlow = outFlow  # h
+            self.inFlow = inFlow  # L/h
+            self.outFlow = outFlow  # L/h
             self.flowType = flowType  # low, normal, high
 
             return None
@@ -38,6 +40,7 @@ class Vi(Equipment):
                 time: {self.time}
                 cyclesPerDay: {self.cyclesPerDay}
                 cyclesPerRun: {self.cyclesPerRun}
+                inFlow: {self.inFlow}
                 outFlow: {self.outFlow}
                 flowType: {self.flowType}'''
     # -------------------------------------------------------------------------------------------------
@@ -47,11 +50,15 @@ class Vi(Equipment):
         self,
         elutionCycles: float,
         volume: float,
+        inFlow: float,
+        outFlow: float,
         process: list[Process],
     ) -> None:
 
         self.elutionCycles = elutionCycles
         self.volume = volume  # L
+        self.inFlow = inFlow  # L/h. flowType = 'normal'
+        self.outFlow = outFlow  # L/h. flowType = 'normal'
         self.process = process
 
         return None
@@ -98,15 +105,22 @@ class Vi(Equipment):
                     time=time,
                     cyclesPerDay=cyclesPerDay,
                     cyclesPerRun=cyclesPerRun,
+                    inFlow=outFlow,
                     outFlow=outFlow,
                     flowType=flowType
                 )
             )
 
+            if step.flowType == 'normal':
+                viInFlow = outFlow
+                viOutFlow = outFlow
+
         # Create an instance of the class
         instance = cls(
             elutionCycles=elutionCycles,
             volume=volume,
+            inFlow=viInFlow,
+            outFlow=viOutFlow,
             process=process
         )
         # Calling load_params on the instance
@@ -148,4 +162,6 @@ class Vi(Equipment):
             reactionTime: {reactionTime}
             elutionCycles: {self.elutionCycles}
             volume: {self.volume},
+            inFlow: {self.inFlow},
+            outFlow: {self.outFlow},
             process:[\n{process_str}\n           ]'''
