@@ -15,6 +15,7 @@ class GuardFilterDiscr(Equipment):
             outFlow: float,
             flux: float,
             processTime: float,
+            processVolume: float,
             changeoutTime: float,
             flowType: Literal['low', 'normal', 'high']
         ) -> None:
@@ -23,6 +24,7 @@ class GuardFilterDiscr(Equipment):
             self.outFlow = outFlow  # L/h
             self.flux = flux  # L/m^2/h
             self.processTime = processTime  # h
+            self.processVolume = processVolume  # L
             self.changeoutTime = changeoutTime  # days
             self.flowType = flowType  # Options: 'low', 'normal', 'high'
 
@@ -34,6 +36,7 @@ class GuardFilterDiscr(Equipment):
                 inFlow: {self.inFlow}
                 outFlow: {self.outFlow}
                 flux: {self.flux}
+                processVolume: {self.processVolume}
                 processTime: {self.processTime}
                 changeoutTime: {self.changeoutTime}
                 flowType: {self.flowType}'''
@@ -42,9 +45,11 @@ class GuardFilterDiscr(Equipment):
     # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
+        titer: float,
         process: Process
     ) -> None:
 
+        self.titer = titer  # in g/L
         self.process = process
 
         return None
@@ -55,17 +60,18 @@ class GuardFilterDiscr(Equipment):
     def from_params(
         cls,
         guardFilterDiscrParams: GuardFilterParams,
-        susvDiscr: SusvDiscr,
+        prevEquipment: Equipment,
     ) -> 'GuardFilterDiscr':
 
         process = []
 
-        for susv in susvDiscr.process:
+        for susv in prevEquipment.process:
             flowType = susv.flowType
             inFlow: float = susv.outFlow
             outFlow: float = susv.outFlow
             flux: float = outFlow / guardFilterDiscrParams.totalArea
             processTime: float = guardFilterDiscrParams.processVolume / outFlow
+            processVolume: float = inFlow * processTime  # L
             changeoutTime: float = processTime * Convert.HOURS_TO_DAYS.value  # days
 
             process.append(cls.Process(
@@ -73,12 +79,13 @@ class GuardFilterDiscr(Equipment):
                 outFlow=outFlow,
                 flux=flux,
                 processTime=processTime,
+                processVolume=processVolume,
                 changeoutTime=changeoutTime,
                 flowType=flowType
             ))
 
         # Create an instance of the class
-        instance = cls(process)
+        instance = cls(process=process, titer=prevEquipment.titer)
         # Now you can call load_params on the instance
         instance.load_params(guardFilterDiscrParams)
 
@@ -95,7 +102,6 @@ class GuardFilterDiscr(Equipment):
         quantity = getattr(self, 'quantity', None)
         loading = getattr(self, 'loading', None)
         totalArea = getattr(self, 'totalArea', None)
-        processVolume = getattr(self, 'processVolume', None)
 
         return f'''
         {self.__class__.__name__}:
@@ -105,5 +111,4 @@ class GuardFilterDiscr(Equipment):
             quantity: {quantity}
             loading: {loading}
             totalArea: {totalArea}
-            processVolume: {processVolume}
             process:[\n{process_str}\n           ]'''

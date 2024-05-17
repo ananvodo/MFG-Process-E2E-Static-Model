@@ -10,9 +10,9 @@ class ChromStepParams(Params):
     # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
-        name: str,
+        name: str | None,
         linearVel: float | None,
-        bufferName: str,
+        bufferName: str | None,
         bufferCost: float,
         cvs: float | None,
         holdTime: float | None = None,

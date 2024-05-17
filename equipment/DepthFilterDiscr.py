@@ -53,8 +53,12 @@ class DepthFilterDiscr(Equipment):
     # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
+        processMass: float,
+        titer: float,
         process: list[Process],
     ):
+        self.processMass = processMass  # in g
+        self.titer = titer  # in g/L
         self.process = process
 
         return None
@@ -91,8 +95,14 @@ class DepthFilterDiscr(Equipment):
                 flowType=flowType
             ))
 
+        # Calculating the titer
+        processMass = susvDiscr.titer * \
+            (depthFilterParams.efficiency / 100) * \
+            depthFilterParams.processVolume
+        titer = processMass / depthFilterParams.totalVolume
+
         # Create an instance of the class
-        instance = cls(process)
+        instance = cls(process=process, processMass=processMass, titer=titer)
         # Now you can call load_params on the instance
         instance.load_params(depthFilterParams)
 

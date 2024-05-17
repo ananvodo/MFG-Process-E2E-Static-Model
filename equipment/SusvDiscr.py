@@ -42,9 +42,11 @@ class SusvDiscr(Equipment):
 
     def __init__(
         self,
+        titer: float,
         process: list[Process],
     ) -> None:
 
+        self.titer = titer  # in g/L
         self.process = process
 
         return None
@@ -58,8 +60,11 @@ class SusvDiscr(Equipment):
         prevEquipment: Equipment
     ) -> 'SusvDiscr':
 
-        inFlow: float = prevEquipment.outFlow * (1 + susvDiscrParams.phAdjustPercent / 100) * (
+        titrationVolumefactor: float = (1 + susvDiscrParams.phAdjustPercent / 100) * (
             1 + susvDiscrParams.conductivityAdjustPercent / 100)
+        inFlow: float = prevEquipment.outFlow * titrationVolumefactor
+
+        titer = prevEquipment.titer / titrationVolumefactor
 
         process = []
 
@@ -103,7 +108,7 @@ class SusvDiscr(Equipment):
             process.append(instance)
 
         # Create an instance of the class
-        instance = cls(process)
+        instance = cls(titer=titer, process=process)
         # Calling load_params on the instance
         instance.load_params(susvDiscrParams)
 

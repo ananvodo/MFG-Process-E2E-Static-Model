@@ -3,7 +3,7 @@ from equipment.Equipment import Equipment
 from equipment.LoadProaChromStep import LoadProaChromStep
 from equipment.SusvDiscr import SusvDiscr
 from process_params.BioreactorParams import BioreactorParams
-from process_params.ProaParams import ProaParams
+from process_params.ChromParams import ChromParams
 
 #########################################################################################################
 # CLASS
@@ -16,9 +16,13 @@ class Proa(Equipment):
     def __init__(
         self,
         steps: list[BufferProaChromStep | LoadProaChromStep],
+        capturedMass: float,
+        titer: float
     ) -> None:
 
         self.steps = steps
+        self.capturedMass = capturedMass  # g/cycle
+        self.titer = titer  # g/L per cycle
 
         return None
 
@@ -27,25 +31,32 @@ class Proa(Equipment):
     @classmethod
     def from_params(
         cls,
-        proaParams: ProaParams,
+        chromParams: ChromParams,
     ) -> 'Proa':
 
         steps = []
 
-        for step_params in proaParams.steps:
+        for step_params in chromParams.steps:
 
             if step_params.name not in ('Loading', 'loading', 'Load', 'load'):
                 step = BufferProaChromStep.from_params(
-                    chromColumnParams=proaParams.column,
+                    chromColumnParams=chromParams.column,
                     chromStepParams=step_params
                 )
 
             steps.append(step)
 
+        elution_step = [step for step in steps if step.name in (
+            'Elution', 'elution', 'Elute', 'elute')][0]
+
+        capturedMass = chromParams.column.volume * \
+            chromParams.resin.targetLoad * chromParams.efficiency / 100  # g
+        titer = capturedMass / elution_step.volume  # g/L
+
         # Create an instance of the class
-        instance = cls(steps)
+        instance = cls(steps=steps, titer=titer, capturedMass=capturedMass)
         # Now you can call load_params on the instance
-        instance.load_params(proaParams)
+        instance.load_params(chromParams)
 
         return instance
 
@@ -87,8 +98,11 @@ class Proa(Equipment):
         efficiency = getattr(self, 'efficiency', None)
         column = getattr(self, 'column', None)
         resin = getattr(self, 'resin', None)
+
         return f'''{self.__class__.__name__}:
             efficiency: {efficiency}
             column: {column}
             resin: {resin}
+            capturedMass: {self.capturedMass}
+            titer: {self.titer}
             steps: [\n{steps_str}\n          ]'''

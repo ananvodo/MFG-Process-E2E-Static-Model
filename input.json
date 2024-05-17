@@ -54,8 +54,8 @@
             {
                 "name": "Load",
                 "linearVel": null,
-                "bufferName": "HCCF",
-                "bufferCost": 0.20,
+                "bufferName": null,
+                "bufferCost": null,
                 "cvs": null
             },
             {
@@ -101,7 +101,7 @@
                 "cvs": 3
             },
             {
-                "name": "Sanitization 3a",
+                "name": "Sani 3a",
                 "linearVel": 95,
                 "bufferName": "100 mM Sodium Hydroxide",
                 "bufferCost": 0.20,
@@ -109,7 +109,7 @@
                 "holdTime": 20
             },
             {
-                "name": "Sanitization 3b",
+                "name": "Sani 3b",
                 "linearVel": 95,
                 "bufferName": "100 mM Sodium Hydroxide",
                 "bufferCost": 0.20,
@@ -125,7 +125,8 @@
                 "holdTime": null
             }
         ],
-        "efficiency": 95
+        "efficiency": 92,
+        "manifoldCost": 50000
     },
     "VI": {
         "stopHighVolumePercent": 200,
@@ -138,7 +139,7 @@
         "baseAdditionPercent": 10,
         "acidBuffer": "2M Acetic Acid",
         "baseBuffer": "2M Tris",
-        "efficiency": 95,
+        "efficiency": 100,
         "reactionTime": 0
     },
     "Susv2": {
@@ -162,5 +163,92 @@
         "bufferFlushLoading": 30,
         "bufferFlushFlux": 200,
         "efficiency": 95
+    },
+    "Df1GuardFilter": {
+        "type": "SHC XLT10",
+        "partNumber": "KHGEG1TTT1",
+        "area": 0.49,
+        "quantity": 3,
+        "loading": 3000
+    },
+    "Susv3": {
+        "stopHighVolumePercent": 90,
+        "uspLowFlowCompensationPercent": 53,
+        "highVolumePercent": 50,
+        "normalVolumePercent": 35,
+        "lowVolumePercent": 25,
+        "stopLowVolumePercent": 15,
+        "flowPercentCompensation": 15,
+        "designVolume": 100,
+        "phAdjustPercent": 0,
+        "conductivityAdjustPercent": 0
+    },
+    "Ps1": {
+        "resin": {
+            "name": "Fractogel COO",
+            "cost": 2000,
+            "targetLoad": 900,
+            "maxLoad": 1000
+        },
+        "column": {
+            "innerDiam": 10,
+            "bedHeight": 15,
+            "quantity": 1
+        },
+        "steps": [
+            {
+                "name": "Pre-EQ",
+                "linearVel": 170,
+                "bufferName": "Acetate/1M NaCl",
+                "bufferCost": 0.20,
+                "cvs": 3
+            },
+            {
+                "name": "EQ",
+                "linearVel": 170,
+                "bufferName": "Acetate/1M NaCl",
+                "bufferCost": 0.20,
+                "cvs": 3
+            },
+            {
+                "name": "Load",
+                "linearVel": null,
+                "bufferName": null,
+                "bufferCost": null,
+                "cvs": null
+            },
+            {
+                "name": "Wash",
+                "linearVel": 170,
+                "bufferName": "Acetate",
+                "bufferCost": 0.20,
+                "cvs": 3
+            },
+            {
+                "name": "Strip",
+                "linearVel": 170,
+                "bufferName": "Acetate/1M NaCl",
+                "bufferCost": 0.63,
+                "cvs": 5
+            },
+            {
+                "name": "Sani",
+                "linearVel": 170,
+                "bufferName": "1M NaOH",
+                "bufferCost": 0.56,
+                "cvs": 3,
+                "holdTime": null
+            },
+            {
+                "name": "Storage",
+                "linearVel": 170,
+                "bufferName": "0.2M NaOH",
+                "bufferCost": 0.11,
+                "cvs": 3,
+                "holdTime": null
+            }
+        ],
+        "efficiency": 95,
+        "manifoldCost": 20000
     }
 }

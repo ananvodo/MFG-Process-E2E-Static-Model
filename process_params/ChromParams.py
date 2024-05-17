@@ -3,12 +3,12 @@ from process_params.ChromResinParams import ChromResinParams
 from process_params.ChromStepParams import ChromStepParams
 from process_params.Params import Params
 
+
 #########################################################################################################
 # CLASS
 #########################################################################################################
 
-
-class ProaParams(Params):
+class ChromParams(Params):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
@@ -17,12 +17,14 @@ class ProaParams(Params):
         resin: ChromResinParams,
         steps: list[ChromStepParams],
         efficiency: float,
+        manifoldCost: float
     ) -> None:
 
         self.column = column
         self.resin = resin
         self.steps = steps
         self.efficiency = efficiency  # in %
+        self.manifoldCost = manifoldCost
 
         return None
 
@@ -32,18 +34,15 @@ class ProaParams(Params):
     def from_dictfile(
         cls,
         data: dict[str, dict[str, str | float | int]],
-        key: str = 'Proa'
-    ) -> 'ProaParams':
-        '''
-        Overloading the from_dictfile method to handle the Proa class.
-        Proa class needs to duplicate the Loading steps to account for high, normal, and low flows.
-        '''
+        key: str
+    ) -> 'ChromParams':
 
         data = data[key]
         # Here, instantiate the necessary components
         resin = ChromResinParams(**data['resin'])
         column = ChromColumnParams(**data['column'])
         efficiency = data['efficiency']
+        manifoldCost = data['manifoldCost']
 
         # Process steps and duplicate specific ones
         steps = []
@@ -51,7 +50,13 @@ class ProaParams(Params):
             step = ChromStepParams(**step_data)
             steps.append(step)
 
-        return cls(column, resin, steps, efficiency)
+        return cls(
+            column=column,
+            resin=resin,
+            steps=steps,
+            efficiency=efficiency,
+            manifoldCost=manifoldCost
+        )
 
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
@@ -61,6 +66,7 @@ class ProaParams(Params):
         return f'''
         {self.__class__.__name__}:
             efficiency: {self.efficiency}
+            manifoldCost: {self.manifoldCost}
             column: {self.column}
             resin: {self.resin}
             steps: [\n{steps_str}\n          ]'''

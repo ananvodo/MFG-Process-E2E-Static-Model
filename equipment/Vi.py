@@ -52,6 +52,8 @@ class Vi(Equipment):
         volume: float,
         inFlow: float,
         outFlow: float,
+        titer: float,
+        mass: float,
         process: list[Process],
     ) -> None:
 
@@ -59,6 +61,8 @@ class Vi(Equipment):
         self.volume = volume  # L
         self.inFlow = inFlow  # L/h. flowType = 'normal'
         self.outFlow = outFlow  # L/h. flowType = 'normal'
+        self.titer = titer  # g/L
+        self.mass = mass  # g
         self.process = process
 
         return None
@@ -85,6 +89,10 @@ class Vi(Equipment):
         volume = elution_volume * \
             (1 + viParams.acidAdditionPercent / 100) * \
             (1 + viParams.baseAdditionPercent / 100)
+
+        # Getting the vi mass
+        mass = proa.capturedMass * elutionCycles * viParams.efficiency / 100  # g
+        titer = mass / volume  # g/L
 
         # Getting the process
         process = []
@@ -121,6 +129,8 @@ class Vi(Equipment):
             volume=volume,
             inFlow=viInFlow,
             outFlow=viOutFlow,
+            titer=titer,
+            mass=mass,
             process=process
         )
         # Calling load_params on the instance
@@ -164,4 +174,6 @@ class Vi(Equipment):
             volume: {self.volume},
             inFlow: {self.inFlow},
             outFlow: {self.outFlow},
+            mass: {self.mass},
+            titer: {self.titer},
             process:[\n{process_str}\n           ]'''

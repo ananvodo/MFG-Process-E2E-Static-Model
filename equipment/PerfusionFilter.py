@@ -14,10 +14,12 @@ class PerfusionFilter(Equipment):
         self,
         inFlow: float,
         outFlow: float,
+        titer: float
     ) -> None:
 
-        self.inFlow: float = inFlow
-        self.outFlow: float = outFlow
+        self.inFlow: float = inFlow  # L/h
+        self.outFlow: float = outFlow  # L/h
+        self.titer: float = titer  # in g/L
 
         return None
     # -------------------------------------------------------------------------------------------------
@@ -32,9 +34,10 @@ class PerfusionFilter(Equipment):
 
         inFlow: float = bioreactor.outFlow
         outFlow: float = bioreactor.outFlow
+        titer: float = bioreactor.titer
 
         # Create an instance of the class
-        instance = cls(inFlow, outFlow)
+        instance = cls(inFlow=inFlow, outFlow=outFlow, titer=titer)
         # Now you can call load_params on the instance
         instance.load_params(perfusionFilterParams)
 
@@ -60,4 +63,5 @@ class PerfusionFilter(Equipment):
             numberOfLumen: {numberOfLumen}
             targetRecicFlow: {targetRecicFlow}
             inFlow: {self.inFlow}
-            outFlow: {self.outFlow}'''
+            outFlow: {self.outFlow}
+            titrer: {self.titer}'''
