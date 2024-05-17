@@ -19,7 +19,6 @@ from process_params.ViParams import ViParams
 from process_params.BioreactorParams import BioreactorParams
 from process_params.GuardFilterParams import GuardFilterParams
 from process_params.PerfusionFilterParams import PerfusionFilterParams
-from process_params.ProaParams import ProaParams
 from process_params.SusvDiscrParams import SusvDiscrParams
 from shared.UserInput import UserInput
 

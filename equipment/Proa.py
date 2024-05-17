@@ -64,7 +64,7 @@ class Proa(Equipment):
     # -------------------------------------------------------------------------------------------------
     def calculate_loading(
         self,
-        proaParams: ProaParams,
+        proaParams: ChromParams,
         susvDiscr: SusvDiscr,
         bioreactorParams: BioreactorParams,
     ) -> 'Proa':
