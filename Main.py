@@ -7,6 +7,7 @@ Created on Fri May  3 16:12:24 2024
 """
 
 from equipment.DepthFilterDiscr import DepthFilterDiscr
+from equipment.PolishStep1 import PolishStep1
 from equipment.Vi import Vi
 from equipment.Bioreactor import Bioreactor
 from equipment.GuardFilterDiscr import GuardFilterDiscr
@@ -52,6 +53,8 @@ df1GuardFilterParams = GuardFilterParams.from_dictfile(
 
 susv3Params = SusvDiscrParams.from_dictfile(data, 'Susv3')
 
+ps1Params = ChromParams.from_dictfile(data, 'Ps1')
+
 # -------------------------------------------------------------------------------------------------
 # Getting the data from the parameters
 # -------------------------------------------------------------------------------------------------
@@ -80,9 +83,8 @@ proa = Proa.from_params(
 )
 
 proa.calculate_loading(
-    proaParams=proaParams,
-    susvDiscr=susv1,
-    bioreactorParams=bioreactorParams
+    chromParams=proaParams,
+    prevEquipment=susv1,
 )
 
 vi = Vi.from_params(
@@ -107,4 +109,13 @@ df1GuardFilter = GuardFilterDiscr.from_params(
     prevEquipment=df1
 )
 
-print(vi)
+ps1 = PolishStep1.from_params(
+    chromParams=ps1Params
+)
+
+ps1.calculate_loading(
+    chromParams=ps1Params,
+    prevEquipment=df1GuardFilter
+)
+
+print(ps1)

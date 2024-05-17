@@ -1,0 +1,85 @@
+from abc import abstractmethod
+from equipment.BufferChromStep import BufferChromStep
+from equipment.Equipment import Equipment
+from equipment.LoadPolishChromStep import LoadPolishChromStep
+from equipment.LoadProaChromStep import LoadProaChromStep
+from process_params.ChromParams import ChromParams
+
+#########################################################################################################
+# CLASS
+#########################################################################################################
+
+
+class Chrom(Equipment):
+    # -------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
+    def __init__(
+        self,
+        steps: list[BufferChromStep | LoadPolishChromStep | LoadProaChromStep],
+        nonLoadTime: float
+    ) -> None:
+
+        self.steps = steps
+        self.nonLoadTime = nonLoadTime  # in minutes
+        self.capturedMass: float | None = None  # g/cycle
+        self.titer: float | None = None  # g/L per cycle
+
+        return None
+
+    # -------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
+    @classmethod
+    def from_params(
+        cls,
+        chromParams: ChromParams,
+    ) -> 'Chrom':
+
+        steps = []
+        nonLoadTime = 0  # in minutes
+
+        for step_params in chromParams.steps:
+
+            if step_params.name not in ('Loading', 'loading', 'Load', 'load'):
+                step = BufferChromStep.from_params(
+                    chromColumnParams=chromParams.column,
+                    chromStepParams=step_params
+                )
+                nonLoadTime += step.time
+
+            steps.append(step)
+
+        # Create an instance of the class
+        instance = cls(steps=steps, nonLoadTime=nonLoadTime)
+        # Now you can call load_params on the instance
+        instance.load_params(chromParams)
+
+        return instance
+
+    # -------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
+
+    @abstractmethod
+    def calculate_loading(
+        self,
+        chromParams: ChromParams,
+        prevEquipment: Equipment,
+    ) -> 'Chrom':
+        pass
+
+    # -------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
+    def __str__(self) -> str:
+        steps_str = ",\n    ".join(str(step) for step in self.steps)
+        # Making sure all the attributes from Equipment class are loaded
+        efficiency = getattr(self, 'efficiency', None)
+        column = getattr(self, 'column', None)
+        resin = getattr(self, 'resin', None)
+
+        return f'''{self.__class__.__name__}:
+            capturedMass: {self.capturedMass}
+            titer: {self.titer}
+            nonLoadTime: {self.nonLoadTime}
+            efficiency: {efficiency}
+            column: {column}
+            resin: {resin}
+            steps: [\n{steps_str}\n          ]'''

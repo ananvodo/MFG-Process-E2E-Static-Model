@@ -1,8 +1,8 @@
 from equipment.Chrom import Chrom
 from equipment.BufferChromStep import BufferChromStep
+from equipment.DepthFilterDiscr import DepthFilterDiscr
 from equipment.Equipment import Equipment
-from equipment.LoadProaChromStep import LoadProaChromStep
-from equipment.SusvDiscr import SusvDiscr
+from equipment.LoadPolishChromStep import LoadPolishChromStep
 from process_params.ChromParams import ChromParams
 
 #########################################################################################################
@@ -10,12 +10,12 @@ from process_params.ChromParams import ChromParams
 #########################################################################################################
 
 
-class Proa(Chrom):
+class PolishStep1(Chrom):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
-        steps: list[BufferChromStep | LoadProaChromStep],
+        steps: list[BufferChromStep | LoadPolishChromStep],
         nonLoadTime: float
     ) -> None:
 
@@ -32,7 +32,7 @@ class Proa(Chrom):
     def from_params(
         cls,
         chromParams: ChromParams,
-    ) -> 'Proa':
+    ) -> 'PolishStep1':
 
         return super().from_params(chromParams)
 
@@ -42,31 +42,26 @@ class Proa(Chrom):
         self,
         chromParams: ChromParams,
         prevEquipment: Equipment,
-    ) -> 'Proa':
+    ) -> None:
 
-        # the previous equipment is the SUSV1
-        susvDiscr: SusvDiscr = prevEquipment  # this is to provide type hinting
+        # the previous equipment is the depth filter
+        depthFilterDiscr: DepthFilterDiscr = prevEquipment
 
-        for process in susvDiscr.process:
+        # Getting the normal inflow into the column
+        for process in depthFilterDiscr.process:
 
             for step_params in chromParams.steps:
                 if step_params.name in ('Loading', 'loading', 'Load', 'load'):
-                    step = LoadProaChromStep.from_params(
+                    step = LoadPolishChromStep.from_params(
                         chromStepParams=step_params,
                         prevEquipmentProcess=process,
                         chromParams=chromParams,
-                        prevEquipment=susvDiscr
+                        prevEquipment=depthFilterDiscr,
+                        nonLoadTime=self.nonLoadTime
                     )
                     self.steps.append(step)
 
-        # Calculate the mass captured
-        elution_step = [step for step in self.steps if step.name in (
-            'Elution', 'elution', 'Elute', 'elute')][0]
-
-        load_step = [step for step in self.steps if step.name in (
-            'Loading', 'loading', 'Load', 'load')][0]  # all load steps capture the same mass
-
-        self.capturedMass = load_step.mass * chromParams.efficiency / 100  # g
-        self.titer = self.capturedMass / elution_step.volume  # g/L
+        self.capturedMass = step.mass * chromParams.efficiency / 100  # g
+        self.titer = self.capturedMass / step.volume  # g/L
 
         return None

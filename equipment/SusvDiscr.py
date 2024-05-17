@@ -1,6 +1,5 @@
 from typing import Literal
 from equipment.Equipment import Equipment
-from equipment.PerfusionFilter import PerfusionFilter
 from process_params.SusvDiscrParams import SusvDiscrParams
 
 
@@ -10,7 +9,6 @@ from process_params.SusvDiscrParams import SusvDiscrParams
 
 
 class SusvDiscr(Equipment):
-
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     class Process():
