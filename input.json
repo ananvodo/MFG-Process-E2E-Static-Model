@@ -218,11 +218,18 @@
                 "cvs": null
             },
             {
+                "name": "Wash Collection",
+                "linearVel": 170,
+                "bufferName": "Acetate",
+                "bufferCost": 0.20,
+                "cvs": 1
+            },
+            {
                 "name": "Wash",
                 "linearVel": 170,
                 "bufferName": "Acetate",
                 "bufferCost": 0.20,
-                "cvs": 3
+                "cvs": 2
             },
             {
                 "name": "Strip",
@@ -250,5 +257,118 @@
         ],
         "efficiency": 95,
         "manifoldCost": 20000
+    },
+    "Ps1GuardFilter": {
+        "type": "Saroporo 2",
+        "partNumber": null,
+        "area": 0.2,
+        "quantity": 1,
+        "loading": 5000
+    },
+    "Susv4": {
+        "stopHighVolumePercent": 90,
+        "uspLowFlowCompensationPercent": 53,
+        "highVolumePercent": 50,
+        "normalVolumePercent": 35,
+        "lowVolumePercent": 25,
+        "stopLowVolumePercent": 15,
+        "flowPercentCompensation": 15,
+        "designVolume": 100,
+        "phAdjustPercent": 0,
+        "conductivityAdjustPercent": 0
+    },
+    "Ps2GuardFilter": {
+        "type": "Sartoporo 2",
+        "partNumber": null,
+        "area": 0.1,
+        "quantity": 1,
+        "loading": 3000
+    },
+    "Ps2": {
+        "resin": {
+            "name": "CaptoAhere",
+            "cost": 2000,
+            "targetLoad": 250,
+            "maxLoad": 300
+        },
+        "column": {
+            "innerDiam": 10,
+            "bedHeight": 20,
+            "quantity": 1
+        },
+        "steps": [
+            {
+                "name": "Pre-EQ",
+                "linearVel": 240,
+                "bufferName": "1M NaCl",
+                "bufferCost": 0.20,
+                "cvs": 0
+            },
+            {
+                "name": "EQ",
+                "linearVel": 240,
+                "bufferName": "MES",
+                "bufferCost": 0.20,
+                "cvs": 3
+            },
+            {
+                "name": "Load",
+                "linearVel": null,
+                "bufferName": null,
+                "bufferCost": null,
+                "cvs": null
+            },
+            {
+                "name": "Wash Collection",
+                "linearVel": 240,
+                "bufferName": "MES",
+                "bufferCost": 0.20,
+                "cvs": 1
+            },
+            {
+                "name": "Wash",
+                "linearVel": 240,
+                "bufferName": "MES",
+                "bufferCost": 0.20,
+                "cvs": 2
+            },
+            {
+                "name": "Strip",
+                "linearVel": 240,
+                "bufferName": "Acid Acetic",
+                "bufferCost": 0.63,
+                "cvs": 5
+            },
+            {
+                "name": "Sani",
+                "linearVel": 240,
+                "bufferName": "1M NaOH",
+                "bufferCost": 0.56,
+                "cvs": 3,
+                "holdTime": null
+            },
+            {
+                "name": "Storage",
+                "linearVel": 240,
+                "bufferName": "0.2M NaOH",
+                "bufferCost": 0.11,
+                "cvs": 3,
+                "holdTime": null
+            }
+        ],
+        "efficiency": 95,
+        "manifoldCost": 20000
+    },
+    "Susv5": {
+        "stopHighVolumePercent": 90,
+        "uspLowFlowCompensationPercent": 53,
+        "highVolumePercent": 50,
+        "normalVolumePercent": 35,
+        "lowVolumePercent": 25,
+        "stopLowVolumePercent": 15,
+        "flowPercentCompensation": 15,
+        "designVolume": 100,
+        "phAdjustPercent": 0,
+        "conductivityAdjustPercent": 0
     }
 }

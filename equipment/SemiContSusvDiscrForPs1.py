@@ -1,6 +1,4 @@
 import math
-from equipment.Chrom import Chrom
-from equipment.Equipment import Equipment
 from equipment.GuardFilterDiscr import GuardFilterDiscr
 from equipment.SusvDiscr import SusvDiscr
 from process_params.ChromParams import ChromParams
@@ -35,7 +33,7 @@ class SemiContSusvDiscr(SusvDiscr):
     def from_params(
         cls,
         susvDiscrParams: SusvDiscrParams,
-        prevEquipment: GuardFilterDiscr | Chrom,
+        prevEquipment: GuardFilterDiscr,
         chromParams: ChromParams
     ) -> 'SemiContSusvDiscr':
 
@@ -47,14 +45,12 @@ class SemiContSusvDiscr(SusvDiscr):
         titrationVolumefactor: float = (1 + susvDiscrParams.phAdjustPercent / 100) * (
             1 + susvDiscrParams.conductivityAdjustPercent / 100)
 
-        # Reading the inflow and titer
-        # -----------------------------
         if isinstance(prevEquipment, GuardFilterDiscr):
             inFlow: float = [process.outFlow for process in prevEquipment.process if process.flowType ==
                              'normal'][0] * titrationVolumefactor
             titer = prevEquipment.titer / titrationVolumefactor
 
-        if isinstance(prevEquipment, Chrom):
+        else:
             load_steps = [step for step in prevEquipment.steps if step.name in (
                 'Load', 'load', 'Loading', 'loading')]
             inFlow: float = [step.flow for step in load_steps if step.flowType ==

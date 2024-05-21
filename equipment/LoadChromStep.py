@@ -1,5 +1,10 @@
+import math
 from typing import Literal
 from equipment.Equipment import Equipment
+from equipment.SusvDiscr import SusvDiscr
+from process_params.ChromParams import ChromParams
+from process_params.ChromStepParams import ChromStepParams
+from shared.UnitConverter import UnitConverter as Convert
 
 #########################################################################################################
 # CLASS
@@ -20,8 +25,7 @@ class LoadChromStep(Equipment):
         linearVel: float,
         cvs: float,
         cyclesPerDay: float,
-        cyclesPerDayPerColumn: float,
-        accumulatedVolumeNonLoadTime: float
+        cyclesPerDayPerColumn: float
     ) -> None:
 
         self.flow = flow  # in L/h
@@ -34,10 +38,62 @@ class LoadChromStep(Equipment):
         self.cvs = cvs
         self.cyclesPerDay = cyclesPerDay  # in cycles/day
         self.cyclesPerDayPerColumn = cyclesPerDayPerColumn  # in cycles/day/column
-        # Volume accumulated in the SUSVduring non-load time
-        self.accumulatedVolumeNonLoadTime = accumulatedVolumeNonLoadTime  # in L
 
         return None
+
+    # -------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
+    @classmethod
+    def from_params(
+        cls,
+        chromStepParams: ChromStepParams,
+        prevEquipmentProcess: SusvDiscr.Process,
+        chromParams: ChromParams,
+        prevEquipment: SusvDiscr
+    ) -> 'LoadChromStep':
+
+       # the previous equipment is the depth filter
+        susvDiscrProcess: SusvDiscr.Process = prevEquipmentProcess
+
+        # Getting some parameters needed
+        columnVolume = chromParams.column.volume
+        resinTargetLoad = chromParams.resin.targetLoad
+        titer = prevEquipment.titer
+        columnInnerDiam = chromParams.column.innerDiam
+        numberOfColumn = chromParams.column.quantity
+
+        # Getting the calculated parameters
+        flowType = susvDiscrProcess.flowType
+        flow = susvDiscrProcess.outFlow
+        linearVel = flow * Convert.LITERS_TO_MILLILITERS.value / \
+            (math.pi * ((columnInnerDiam / 2) ** 2))
+        rt = (columnVolume / flow) * Convert.HOURS_TO_MINUTES.value
+        time = (resinTargetLoad * columnVolume) / \
+            (flow * titer) * Convert.HOURS_TO_MINUTES.value
+        mass = columnVolume * resinTargetLoad  # in g
+        volume = mass / titer  # in L
+        cvs = volume / columnVolume
+        cyclesPerDay = 1 / \
+            (time * Convert.MINUTES_TO_DAYS.value)  # in cycles/day
+        cyclesPerDayPerColumn = cyclesPerDay / numberOfColumn  # in cycles/day/column
+
+        # Create an instance of the class
+        instance = cls(
+            flow=flow,
+            rt=rt,
+            time=time,
+            volume=volume,
+            flowType=flowType,
+            mass=mass,
+            linearVel=linearVel,
+            cvs=cvs,
+            cyclesPerDay=cyclesPerDay,
+            cyclesPerDayPerColumn=cyclesPerDayPerColumn
+        )
+        # Calling load_params on the instance
+        instance.load_params(chromStepParams)
+
+        return instance
 
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------

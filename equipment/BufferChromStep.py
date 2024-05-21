@@ -43,8 +43,7 @@ class BufferChromStep(Equipment):
             ((chromColumnParams.innerDiam / 2) ** 2) * \
             Convert.MILLILITERS_TO_LITERS.value
         rt = (chromColumnParams.volume / flow) * Convert.HOURS_TO_MINUTES.value
-        time = (chromColumnParams.volume * chromStepParams.cvs /
-                flow) * Convert.HOURS_TO_MINUTES.value
+        time = rt * chromStepParams.cvs  # in minutes
         volume = chromColumnParams.volume * chromStepParams.cvs  # in L/cycle
 
         # Create an instance of the class
@@ -81,5 +80,4 @@ class BufferChromStep(Equipment):
             flow: {self.flow}
             rt: {self.rt}
             time: {self.time}
-            volume: {self.volume}
-        '''
+            volume: {self.volume}'''

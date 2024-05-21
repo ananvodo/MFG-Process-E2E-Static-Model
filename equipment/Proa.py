@@ -1,7 +1,7 @@
 from equipment.Chrom import Chrom
 from equipment.BufferChromStep import BufferChromStep
 from equipment.Equipment import Equipment
-from equipment.LoadProaChromStep import LoadProaChromStep
+from equipment.LoadChromStep import LoadChromStep
 from equipment.SusvDiscr import SusvDiscr
 from process_params.ChromParams import ChromParams
 
@@ -15,7 +15,7 @@ class Proa(Chrom):
     # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
-        steps: list[BufferChromStep | LoadProaChromStep],
+        steps: list[BufferChromStep | LoadChromStep],
         nonLoadTime: float
     ) -> None:
 
@@ -51,7 +51,7 @@ class Proa(Chrom):
 
             for step_params in chromParams.steps:
                 if step_params.name in ('Loading', 'loading', 'Load', 'load'):
-                    step = LoadProaChromStep.from_params(
+                    step = LoadChromStep.from_params(
                         chromStepParams=step_params,
                         prevEquipmentProcess=process,
                         chromParams=chromParams,

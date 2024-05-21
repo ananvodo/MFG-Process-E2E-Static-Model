@@ -1,8 +1,7 @@
 from equipment.Chrom import Chrom
 from equipment.BufferChromStep import BufferChromStep
-from equipment.DepthFilterDiscr import DepthFilterDiscr
-from equipment.Equipment import Equipment
-from equipment.LoadPolishChromStep import LoadPolishChromStep
+from equipment.LoadChromStep import LoadChromStep
+from equipment.SemiContSusvDiscr import SemiContSusvDiscr
 from process_params.ChromParams import ChromParams
 
 #########################################################################################################
@@ -10,12 +9,12 @@ from process_params.ChromParams import ChromParams
 #########################################################################################################
 
 
-class PolishStep1(Chrom):
+class PolishStep(Chrom):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
-        steps: list[BufferChromStep | LoadPolishChromStep],
+        steps: list[BufferChromStep | LoadChromStep],
         nonLoadTime: float
     ) -> None:
 
@@ -32,7 +31,7 @@ class PolishStep1(Chrom):
     def from_params(
         cls,
         chromParams: ChromParams,
-    ) -> 'PolishStep1':
+    ) -> 'PolishStep':
 
         return super().from_params(chromParams)
 
@@ -41,27 +40,33 @@ class PolishStep1(Chrom):
     def calculate_loading(
         self,
         chromParams: ChromParams,
-        prevEquipment: Equipment,
+        prevEquipment: SemiContSusvDiscr,
     ) -> None:
 
-        # the previous equipment is the depth filter
-        depthFilterDiscr: DepthFilterDiscr = prevEquipment
+        # the previous equipment is really the SUSV3 equipment.
+        # The problem is that SUSV3 equipment outFlow is defined by the PS equipment.
+        # The outFlow of the SUSV3 feed the PS equipment, which is defined by the column size and resin.
+        # The SUSV3 normal
 
         # Getting the normal inflow into the column
-        for process in depthFilterDiscr.process:
+        for process in prevEquipment.process:
+            process: SemiContSusvDiscr.Process
 
             for step_params in chromParams.steps:
+
                 if step_params.name in ('Loading', 'loading', 'Load', 'load'):
-                    step = LoadPolishChromStep.from_params(
+                    step = LoadChromStep.from_params(
                         chromStepParams=step_params,
                         prevEquipmentProcess=process,
                         chromParams=chromParams,
-                        prevEquipment=depthFilterDiscr,
-                        nonLoadTime=self.nonLoadTime
+                        prevEquipment=prevEquipment,
                     )
                     self.steps.append(step)
 
+        wash_collection_volume = [
+            step.volume for step in self.steps if step.name == 'Wash Collection'][0]
         self.capturedMass = step.mass * chromParams.efficiency / 100  # g
-        self.titer = self.capturedMass / step.volume  # g/L
+        volume_total = step.volume + wash_collection_volume
+        self.titer = self.capturedMass / volume_total  # g/L
 
         return None

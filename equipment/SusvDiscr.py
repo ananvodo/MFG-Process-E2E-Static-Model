@@ -1,7 +1,5 @@
 from typing import Literal
 from equipment.Equipment import Equipment
-from process_params.SusvDiscrParams import SusvDiscrParams
-
 
 #########################################################################################################
 # CLASS
@@ -17,12 +15,14 @@ class SusvDiscr(Equipment):
             inFlow: float,
             outFlow: float,
             rt: float,
+            accumulatedVolumeInNoOutFlow: float,
             flowType: Literal['low', 'normal', 'high']
         ) -> None:
 
-            self.inFlow = inFlow
-            self.outFlow = outFlow
-            self.rt = rt
+            self.inFlow = inFlow  # in L/min
+            self.outFlow = outFlow  # in L/min
+            self.rt = rt  # in minutes
+            self.accumulatedVolumeInNoOutFlow = accumulatedVolumeInNoOutFlow  # in L
             self.flowType = flowType
 
             return None
@@ -33,11 +33,11 @@ class SusvDiscr(Equipment):
                 inFlow: {self.inFlow}
                 outFlow: {self.outFlow}
                 rt: {self.rt}
+                accumulatedVolumeInNoOutFlow: {self.accumulatedVolumeInNoOutFlow}
                 flowType: {self.flowType}'''
 
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
-
     def __init__(
         self,
         titer: float,
@@ -48,72 +48,9 @@ class SusvDiscr(Equipment):
         self.process = process
 
         return None
-
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
-    @classmethod
-    def from_params(
-        cls,
-        susvDiscrParams: SusvDiscrParams,
-        prevEquipment: Equipment
-    ) -> 'SusvDiscr':
 
-        titrationVolumefactor: float = (1 + susvDiscrParams.phAdjustPercent / 100) * (
-            1 + susvDiscrParams.conductivityAdjustPercent / 100)
-        inFlow: float = prevEquipment.outFlow * titrationVolumefactor
-
-        titer = prevEquipment.titer / titrationVolumefactor
-
-        process = []
-
-        for flowType in susvDiscrParams.flowType:
-
-            if flowType == 'low':
-                outFlow: float = inFlow * \
-                    (1 - susvDiscrParams.flowPercentCompensation / 100)
-                rt: float = susvDiscrParams.lowVolume / inFlow
-
-                instance = cls.Process(
-                    inFlow=inFlow,
-                    outFlow=outFlow,
-                    rt=rt,
-                    flowType=flowType
-                )
-
-            elif flowType == 'normal':
-                outFlow: float = inFlow
-                rt: float = susvDiscrParams.normalVolume / inFlow
-
-                instance = cls.Process(
-                    inFlow=inFlow,
-                    outFlow=outFlow,
-                    rt=rt,
-                    flowType=flowType
-                )
-
-            else:  # flowType == 'high'
-                outFlow: float = inFlow * \
-                    (1 + susvDiscrParams.flowPercentCompensation / 100)
-                rt: float = susvDiscrParams.highVolume / inFlow
-
-                instance = cls.Process(
-                    inFlow=inFlow,
-                    outFlow=outFlow,
-                    rt=rt,
-                    flowType=flowType
-                )
-
-            process.append(instance)
-
-        # Create an instance of the class
-        instance = cls(titer=titer, process=process)
-        # Calling load_params on the instance
-        instance.load_params(susvDiscrParams)
-
-        return instance
-
-    # -------------------------------------------------------------------------------------------------
-    # -------------------------------------------------------------------------------------------------
     def __str__(self) -> str:
         process_str = ",\n    ".join(str(step) for step in self.process)
 

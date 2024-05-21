@@ -46,7 +46,7 @@ class GuardFilterDiscr(Equipment):
     def __init__(
         self,
         titer: float,
-        process: Process
+        process: list[Process],
     ) -> None:
 
         self.titer = titer  # in g/L
@@ -63,7 +63,7 @@ class GuardFilterDiscr(Equipment):
         prevEquipment: Equipment,
     ) -> 'GuardFilterDiscr':
 
-        process = []
+        process: list[cls.Process] = []
 
         for susv in prevEquipment.process:
             flowType = susv.flowType

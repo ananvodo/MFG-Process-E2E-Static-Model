@@ -50,8 +50,6 @@ class Vi(Equipment):
         self,
         elutionCycles: float,
         volume: float,
-        inFlow: float,
-        outFlow: float,
         titer: float,
         mass: float,
         process: list[Process],
@@ -59,8 +57,6 @@ class Vi(Equipment):
 
         self.elutionCycles = elutionCycles
         self.volume = volume  # L
-        self.inFlow = inFlow  # L/h. flowType = 'normal'
-        self.outFlow = outFlow  # L/h. flowType = 'normal'
         self.titer = titer  # g/L
         self.mass = mass  # g
         self.process = process
@@ -95,7 +91,7 @@ class Vi(Equipment):
         titer = mass / volume  # g/L
 
         # Getting the process
-        process = []
+        process: list[cls.Process] = []  # List of Process instances
         loading_steps = [step for step in proa.steps if step.name in (
             'Loading', 'loading', 'Load', 'load')]
 
@@ -119,16 +115,10 @@ class Vi(Equipment):
                 )
             )
 
-            if step.flowType == 'normal':
-                viInFlow = outFlow
-                viOutFlow = outFlow
-
         # Create an instance of the class
         instance = cls(
             elutionCycles=elutionCycles,
             volume=volume,
-            inFlow=viInFlow,
-            outFlow=viOutFlow,
             titer=titer,
             mass=mass,
             process=process
@@ -172,8 +162,6 @@ class Vi(Equipment):
             reactionTime: {reactionTime}
             elutionCycles: {self.elutionCycles}
             volume: {self.volume},
-            inFlow: {self.inFlow},
-            outFlow: {self.outFlow},
             mass: {self.mass},
             titer: {self.titer},
             process:[\n{process_str}\n           ]'''

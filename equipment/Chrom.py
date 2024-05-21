@@ -1,8 +1,7 @@
 from abc import abstractmethod
 from equipment.BufferChromStep import BufferChromStep
 from equipment.Equipment import Equipment
-from equipment.LoadPolishChromStep import LoadPolishChromStep
-from equipment.LoadProaChromStep import LoadProaChromStep
+from equipment.LoadChromStep import LoadChromStep
 from process_params.ChromParams import ChromParams
 
 #########################################################################################################
@@ -15,7 +14,7 @@ class Chrom(Equipment):
     # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
-        steps: list[BufferChromStep | LoadPolishChromStep | LoadProaChromStep],
+        steps: list[BufferChromStep | LoadChromStep],
         nonLoadTime: float
     ) -> None:
 
@@ -34,7 +33,8 @@ class Chrom(Equipment):
         chromParams: ChromParams,
     ) -> 'Chrom':
 
-        steps = []
+        # Getting the steps
+        steps: list[BufferChromStep | LoadChromStep] = []
         nonLoadTime = 0  # in minutes
 
         for step_params in chromParams.steps:
@@ -44,7 +44,9 @@ class Chrom(Equipment):
                     chromColumnParams=chromParams.column,
                     chromStepParams=step_params
                 )
-                nonLoadTime += step.time
+
+                if step_params.name != 'Storage':
+                    nonLoadTime += step.time
 
             steps.append(step)
 
