@@ -6,7 +6,7 @@ from shared.UnitConverter import UnitConverter as Convert
 #########################################################################################################
 
 
-class DepthFilterParams(Params):
+class DepthFilterViralFilterParams(Params):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
@@ -46,7 +46,7 @@ class DepthFilterParams(Params):
         cls,
         data: dict[str, str | float | int],
         key: str
-    ) -> 'DepthFilterParams':
+    ) -> 'DepthFilterViralFilterParams':
 
         return super().from_dictfile(data, key)
     # -------------------------------------------------------------------------------------------------

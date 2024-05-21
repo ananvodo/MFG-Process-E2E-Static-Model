@@ -3,7 +3,7 @@ from typing import Literal
 from equipment.Equipment import Equipment
 from equipment.SusvDiscr import SusvDiscr
 from process_params.BioreactorParams import BioreactorParams
-from process_params.DepthFilterParams import DepthFilterParams
+from process_params.DepthFilterViralFilterParams import DepthFilterViralFilterParams
 from shared.UnitConverter import UnitConverter as Convert
 
 #########################################################################################################
@@ -11,7 +11,7 @@ from shared.UnitConverter import UnitConverter as Convert
 #########################################################################################################
 
 
-class DepthFilterDiscr(Equipment):
+class DepthFilterViralFilterDiscr(Equipment):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     class Process():
@@ -68,10 +68,10 @@ class DepthFilterDiscr(Equipment):
     @classmethod
     def from_params(
         cls,
-        depthFilterParams: DepthFilterParams,
+        filterParams: DepthFilterViralFilterParams,
         bioreactorParams: BioreactorParams,
         susvDiscr: SusvDiscr,
-    ) -> 'DepthFilterDiscr':
+    ) -> 'DepthFilterViralFilterDiscr':
 
         process = []
 
@@ -79,11 +79,11 @@ class DepthFilterDiscr(Equipment):
             flowType = susv.flowType
             inFlow: float = susv.outFlow
             outFlow: float = susv.outFlow
-            flux: float = outFlow / depthFilterParams.totalArea
-            processTime: float = depthFilterParams.processVolume / outFlow
+            flux: float = outFlow / filterParams.totalArea
+            processTime: float = filterParams.processVolume / outFlow
             changeoutTime: float = processTime * Convert.HOURS_TO_DAYS.value  # days
             quantityPerRun: int = math.ceil(
-                bioreactorParams.prodDays / (changeoutTime * depthFilterParams.quantity))
+                bioreactorParams.prodDays / (changeoutTime * filterParams.quantity))
 
             process.append(cls.Process(
                 inFlow=inFlow,
@@ -97,14 +97,14 @@ class DepthFilterDiscr(Equipment):
 
         # Calculating the titer
         processMass = susvDiscr.titer * \
-            (depthFilterParams.efficiency / 100) * \
-            depthFilterParams.processVolume
-        titer = processMass / depthFilterParams.totalVolume
+            (filterParams.efficiency / 100) * \
+            filterParams.processVolume
+        titer = processMass / filterParams.totalVolume
 
         # Create an instance of the class
         instance = cls(process=process, processMass=processMass, titer=titer)
         # Now you can call load_params on the instance
-        instance.load_params(depthFilterParams)
+        instance.load_params(filterParams)
 
         return instance
 

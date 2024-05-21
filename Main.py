@@ -7,7 +7,7 @@ Created on Fri May  3 16:12:24 2024
 """
 
 from equipment.ContSusvDiscr import ContSusvDiscr
-from equipment.DepthFilterDiscr import DepthFilterDiscr
+from equipment.DepthFilterViralFilterDiscr import DepthFilterViralFilterDiscr
 from equipment.PolishStep import PolishStep
 from equipment.SemiContSusvDiscr import SemiContSusvDiscr
 from equipment.Vi import Vi
@@ -16,7 +16,7 @@ from equipment.GuardFilterDiscr import GuardFilterDiscr
 from equipment.PerfusionFilter import PerfusionFilter
 from equipment.Proa import Proa
 from process_params.ChromParams import ChromParams
-from process_params.DepthFilterParams import DepthFilterParams
+from process_params.DepthFilterViralFilterParams import DepthFilterViralFilterParams
 from process_params.ViParams import ViParams
 from process_params.BioreactorParams import BioreactorParams
 from process_params.GuardFilterParams import GuardFilterParams
@@ -47,9 +47,9 @@ viParams = ViParams.from_dictfile(data, 'VI')
 
 susv2Params = SusvDiscrParams.from_dictfile(data, 'Susv2')
 
-df1Params = DepthFilterParams.from_dictfile(data, 'DF1')
+dfParams = DepthFilterViralFilterParams.from_dictfile(data, 'Df')
 
-df1GuardFilterParams = GuardFilterParams.from_dictfile(
+dfGuardFilterParams = GuardFilterParams.from_dictfile(
     data, 'Df1GuardFilter')
 
 susv3Params = SusvDiscrParams.from_dictfile(data, 'Susv3')
@@ -67,6 +67,13 @@ ps2GuardFilterParams = GuardFilterParams.from_dictfile(
 ps2Params = ChromParams.from_dictfile(data, 'Ps2')
 
 susv5Params = SusvDiscrParams.from_dictfile(data, 'Susv5')
+
+vf1Params = DepthFilterViralFilterParams.from_dictfile(data, 'Vf1')
+
+vf2Params = DepthFilterViralFilterParams.from_dictfile(data, 'Vf2')
+
+vfGuardFilterParams = GuardFilterParams.from_dictfile(
+    data, 'Ps1GuardFilter')
 
 # -------------------------------------------------------------------------------------------------
 # Getting the data from the parameters
@@ -111,20 +118,20 @@ susv2 = ContSusvDiscr.from_params(
     prevEquipment=vi,
 )
 
-df1 = DepthFilterDiscr.from_params(
-    depthFilterParams=df1Params,
+df = DepthFilterViralFilterDiscr.from_params(
+    filterParams=dfParams,
     bioreactorParams=bioreactorParams,
     susvDiscr=susv2
 )
 
-df1GuardFilter = GuardFilterDiscr.from_params(
-    guardFilterDiscrParams=df1GuardFilterParams,
-    prevEquipment=df1
+dfGuardFilter = GuardFilterDiscr.from_params(
+    guardFilterDiscrParams=dfGuardFilterParams,
+    prevEquipment=df
 )
 
 susv3 = SemiContSusvDiscr.from_params(
     susvDiscrParams=susv3Params,
-    prevEquipment=df1GuardFilter,
+    prevEquipment=dfGuardFilter,
     chromParams=ps1Params
 )
 
@@ -167,4 +174,21 @@ susv5 = ContSusvDiscr.from_params(
     prevEquipment=ps2,
 )
 
-print(susv4)
+vf1 = DepthFilterViralFilterDiscr.from_params(
+    filterParams=vf1Params,
+    bioreactorParams=bioreactorParams,
+    susvDiscr=susv5
+)
+
+vf2 = DepthFilterViralFilterDiscr.from_params(
+    filterParams=vf2Params,
+    bioreactorParams=bioreactorParams,
+    susvDiscr=susv5
+)
+
+vfGuardFilter = GuardFilterDiscr.from_params(
+    guardFilterDiscrParams=vfGuardFilterParams,
+    prevEquipment=vf1
+)
+
+print(vfGuardFilter)

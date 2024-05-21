@@ -154,7 +154,7 @@
         "phAdjustPercent": 0,
         "conductivityAdjustPercent": 0
     },
-    "DF1": {
+    "Df": {
         "type": "X0SP",
         "partNumber": "MX0SP05FS1",
         "area": 1.1,
@@ -370,5 +370,36 @@
         "designVolume": 100,
         "phAdjustPercent": 0,
         "conductivityAdjustPercent": 0
+    },
+    "Vf1": {
+        "type": "Shield",
+        "partNumber": null,
+        "area": 0.51,
+        "quantity": 1,
+        "loading": 1000,
+        "bufferFlushLoading": 50,
+        "bufferFlushFlux": 200,
+        "efficiency": 95
+    },
+    "Vf2": {
+        "type": "VPro",
+        "partNumber": null,
+        "area": 0.51,
+        "quantity": 1,
+        "loading": 1000,
+        "bufferFlushLoading": 50,
+        "bufferFlushFlux": 200,
+        "efficiency": 95
+    },
+    "VfGuardFilter": {
+        "type": "SHC",
+        "partNumber": "KHGEG1TTT1",
+        "area": 0.49,
+        "quantity": 1,
+        "loading": 1000
+    },
+    "SUSV6": {
+        "designVolume": 1000,
+        "quantity": 2
     }
 }
