@@ -1,50 +1,34 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from typing import Literal
-from equipment.Bioreactor import Bioreactor
-from equipment.Equipment import Equipment
-from process_params.PerfusionFilterParams import PerfusionFilterParams
+
+from process_data.ProcessData import ProcessData
+
+if TYPE_CHECKING:
+    from process_params.PerfusionFilterParams import PerfusionFilterParams
+    from process_data.Bioreactor import Bioreactor
 
 #########################################################################################################
 # CLASS
 #########################################################################################################
 
 
-class PerfusionFilter(Equipment):
-    # -------------------------------------------------------------------------------------------------
-    # -------------------------------------------------------------------------------------------------
-    class Process():
-        def __init__(
-            self,
-            inFlow: float,
-            outFlow: float,
-            flowType: Literal['low', 'normal', 'high'] = 'normal'
-        ) -> None:
-
-            self.inFlow = inFlow  # L/h
-            self.outFlow = outFlow  # L/h
-            self.flowType = flowType  # Options: 'low', 'normal', 'high'
-
-            return None
-
-        def __str__(self) -> str:
-            return f'''
-            {self.__class__.__name__}:
-                inFlow: {self.inFlow}
-                outFlow: {self.outFlow}'''
-
-    # -------------------------------------------------------------------------------------------------
-    # -------------------------------------------------------------------------------------------------
+class PerfusionFilter(ProcessData):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
         self,
         titer: float,
-        process: list[Process],
+        inFlow: float,
+        outFlow: float,
     ) -> None:
 
         self.titer: float = titer  # in g/L
-        self.process = process
+        self.inFlow = inFlow  # L/h
+        self.outFlow = outFlow  # L/h
 
         return None
+
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
 
@@ -53,18 +37,18 @@ class PerfusionFilter(Equipment):
         cls,
         bioreactor: Bioreactor,
         perfusionFilterParams: PerfusionFilterParams,
-    ) -> 'PerfusionFilter':
-
-        process: list[cls.Process] = []
+    ) -> PerfusionFilter:
 
         inFlow: float = bioreactor.outFlow
         outFlow: float = bioreactor.outFlow
         titer: float = bioreactor.titer
 
-        process.append(cls.Process(inFlow=inFlow, outFlow=outFlow))
-
         # Create an instance of the class
-        instance = cls(process=process, titer=titer)
+        instance = cls(
+            titer=titer,
+            inFlow=inFlow,
+            outFlow=outFlow,
+        )
         # Now you can call load_params on the instance
         instance.load_params(perfusionFilterParams)
 

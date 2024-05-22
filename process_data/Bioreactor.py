@@ -1,4 +1,4 @@
-from equipment.Equipment import Equipment
+from process_data.ProcessData import ProcessData
 from process_params.BioreactorParams import BioreactorParams
 
 #########################################################################################################
@@ -6,7 +6,7 @@ from process_params.BioreactorParams import BioreactorParams
 #########################################################################################################
 
 
-class Bioreactor(Equipment):
+class Bioreactor(ProcessData):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(

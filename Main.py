@@ -6,15 +6,15 @@ Created on Fri May  3 16:12:24 2024
 @author: avodopivec
 """
 
-from equipment.ContSusvDiscr import ContSusvDiscr
-from equipment.DepthFilterViralFilterDiscr import DepthFilterViralFilterDiscr
-from equipment.PolishStep import PolishStep
-from equipment.SemiContSusvDiscr import SemiContSusvDiscr
-from equipment.Vi import Vi
-from equipment.Bioreactor import Bioreactor
-from equipment.GuardFilterDiscr import GuardFilterDiscr
-from equipment.PerfusionFilter import PerfusionFilter
-from equipment.Proa import Proa
+from process_data.ContSusvDiscr import ContSusvDiscr
+from process_data.DepthFilterViralFilterDiscr import DepthFilterViralFilterDiscr
+from process_data.PolishStep import PolishStep
+from process_data.SemiContSusvDiscr import SemiContSusvDiscr
+from process_data.Vi import Vi
+from process_data.Bioreactor import Bioreactor
+from process_data.GuardFilterDiscr import GuardFilterDiscr
+from process_data.PerfusionFilter import PerfusionFilter
+from process_data.Proa import Proa
 from process_params.ChromParams import ChromParams
 from process_params.DepthFilterViralFilterParams import DepthFilterViralFilterParams
 from process_params.ViParams import ViParams

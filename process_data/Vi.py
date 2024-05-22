@@ -1,20 +1,25 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 import math
 from typing import Literal
-from equipment.Equipment import Equipment
-from equipment.Proa import Proa
-from process_params.BioreactorParams import BioreactorParams
-from process_params.ViParams import ViParams
+from process_data.ProcessData import ProcessData
+from process_data.ProcessVariation import ProcessVariation
 from shared.UnitConverter import UnitConverter as Convert
+
+if TYPE_CHECKING:
+    from process_params.BioreactorParams import BioreactorParams
+    from process_data.Proa import Proa
+    from process_params.ViParams import ViParams
 
 ###########################################################################################################
 # CLASS
 ###########################################################################################################
 
 
-class Vi(Equipment):
+class Vi(ProcessVariation):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
-    class Process():
+    class Process(ProcessVariation.Process):
         def __init__(
             self,
             time: float,
@@ -66,13 +71,23 @@ class Vi(Equipment):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
 
+    @property
+    def process(self) -> list[Vi.Process]:
+        return self._process
+
+    @process.setter
+    def process(self, value: list[Vi.Process]) -> None:
+        self._process = value
+    # -------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
+
     @classmethod
     def from_params(
         cls,
         viParams: ViParams,
         proa: Proa,
         bioreactorParams: BioreactorParams,
-    ) -> 'Vi':
+    ) -> Vi:
 
         # Getting the elution cycles
         elution_step = [step for step in proa.steps if step.name in (

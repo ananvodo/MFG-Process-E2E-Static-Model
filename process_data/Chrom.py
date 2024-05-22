@@ -1,15 +1,21 @@
+from __future__ import annotations
 from abc import abstractmethod
-from equipment.BufferChromStep import BufferChromStep
-from equipment.Equipment import Equipment
-from equipment.LoadChromStep import LoadChromStep
+from typing import TYPE_CHECKING
+from process_data.BufferChromStep import BufferChromStep
+from process_data.ProcessData import ProcessData
+from process_data.LoadChromStep import LoadChromStep
 from process_params.ChromParams import ChromParams
+
+if TYPE_CHECKING:
+    from process_data.SusvDiscr import SusvDiscr
+    from process_params.ChromParams import ChromParams
 
 #########################################################################################################
 # CLASS
 #########################################################################################################
 
 
-class Chrom(Equipment):
+class Chrom(ProcessData):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
@@ -63,8 +69,8 @@ class Chrom(Equipment):
     @abstractmethod
     def calculate_loading(
         self,
-        chromParams: ChromParams,
-        prevEquipment: Equipment,
+        chromParams: 'ChromParams',
+        prevEquipment: 'SusvDiscr',
     ) -> 'Chrom':
         pass
 

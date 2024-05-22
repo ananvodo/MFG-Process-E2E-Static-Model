@@ -1,15 +1,17 @@
+from __future__ import annotations
 from typing import Literal
-from equipment.Equipment import Equipment
+
+from process_data.ProcessVariation import ProcessVariation
 
 #########################################################################################################
 # CLASS
 #########################################################################################################
 
 
-class SusvDiscr(Equipment):
+class SusvDiscr(ProcessVariation):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
-    class Process():
+    class Process(ProcessVariation.Process):
         def __init__(
             self,
             inFlow: float,
@@ -48,6 +50,16 @@ class SusvDiscr(Equipment):
         self.process = process
 
         return None
+    # -------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------
+
+    @property
+    def process(self) -> list[SusvDiscr.Process]:
+        return self._process
+
+    @process.setter
+    def process(self, value: list[SusvDiscr.Process]) -> None:
+        self._process = value
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
 

@@ -1,15 +1,19 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 import math
-from equipment.Equipment import Equipment
-from process_params.ChromColumnParams import ChromColumnParams
-from process_params.ChromStepParams import ChromStepParams
+from process_data.ProcessData import ProcessData
 from shared.UnitConverter import UnitConverter as Convert
+
+if TYPE_CHECKING:
+    from process_params.ChromColumnParams import ChromColumnParams
+    from process_params.ChromStepParams import ChromStepParams
 
 #########################################################################################################
 # CLASS
 #########################################################################################################
 
 
-class BufferChromStep(Equipment):
+class BufferChromStep(ProcessData):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
@@ -36,7 +40,7 @@ class BufferChromStep(Equipment):
         cls,
         chromColumnParams: ChromColumnParams,
         chromStepParams: ChromStepParams
-    ) -> 'BufferChromStep':
+    ) -> BufferChromStep:
 
         name = chromStepParams.name
         flow = chromStepParams.linearVel * math.pi * \

@@ -1,9 +1,12 @@
-from equipment.Chrom import Chrom
-from equipment.BufferChromStep import BufferChromStep
-from equipment.Equipment import Equipment
-from equipment.LoadChromStep import LoadChromStep
-from equipment.SusvDiscr import SusvDiscr
-from process_params.ChromParams import ChromParams
+from __future__ import annotations
+from typing import TYPE_CHECKING
+from process_data.Chrom import Chrom
+from process_data.BufferChromStep import BufferChromStep
+from process_data.LoadChromStep import LoadChromStep
+
+if TYPE_CHECKING:
+    from process_data.ContSusvDiscr import ContSusvDiscr
+    from process_params.ChromParams import ChromParams
 
 #########################################################################################################
 # CLASS
@@ -32,7 +35,7 @@ class Proa(Chrom):
     def from_params(
         cls,
         chromParams: ChromParams,
-    ) -> 'Proa':
+    ) -> Proa:
 
         return super().from_params(chromParams)
 
@@ -41,13 +44,10 @@ class Proa(Chrom):
     def calculate_loading(
         self,
         chromParams: ChromParams,
-        prevEquipment: Equipment,
+        prevEquipment: ContSusvDiscr,
     ) -> 'Proa':
 
-        # the previous equipment is the SUSV1
-        susvDiscr: SusvDiscr = prevEquipment  # this is to provide type hinting
-
-        for process in susvDiscr.process:
+        for process in prevEquipment.process:
 
             for step_params in chromParams.steps:
                 if step_params.name in ('Loading', 'loading', 'Load', 'load'):
@@ -55,7 +55,7 @@ class Proa(Chrom):
                         chromStepParams=step_params,
                         prevEquipmentProcess=process,
                         chromParams=chromParams,
-                        prevEquipment=susvDiscr
+                        prevEquipment=prevEquipment
                     )
                     self.steps.append(step)
 

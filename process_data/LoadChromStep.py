@@ -1,17 +1,21 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 import math
 from typing import Literal
-from equipment.Equipment import Equipment
-from equipment.SusvDiscr import SusvDiscr
-from process_params.ChromParams import ChromParams
-from process_params.ChromStepParams import ChromStepParams
+from process_data.ProcessData import ProcessData
 from shared.UnitConverter import UnitConverter as Convert
+
+if TYPE_CHECKING:
+    from process_data.SusvDiscr import SusvDiscr
+    from process_params.ChromParams import ChromParams
+    from process_params.ChromStepParams import ChromStepParams
 
 #########################################################################################################
 # CLASS
 #########################################################################################################
 
 
-class LoadChromStep(Equipment):
+class LoadChromStep(ProcessData):
     # -------------------------------------------------------------------------------------------------
     # -------------------------------------------------------------------------------------------------
     def __init__(
@@ -50,7 +54,7 @@ class LoadChromStep(Equipment):
         prevEquipmentProcess: SusvDiscr.Process,
         chromParams: ChromParams,
         prevEquipment: SusvDiscr
-    ) -> 'LoadChromStep':
+    ) -> LoadChromStep:
 
        # the previous equipment is the depth filter
         susvDiscrProcess: SusvDiscr.Process = prevEquipmentProcess

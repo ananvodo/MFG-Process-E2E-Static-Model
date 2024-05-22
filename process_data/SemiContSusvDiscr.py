@@ -1,10 +1,14 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 import math
-from equipment.GuardFilterDiscr import GuardFilterDiscr
-from equipment.SusvDiscr import SusvDiscr
-from process_params.ChromParams import ChromParams
+from process_data.Chrom import Chrom
+from process_data.GuardFilterDiscr import GuardFilterDiscr
+from process_data.SusvDiscr import SusvDiscr
 from process_params.SusvDiscrParams import SusvDiscrParams
 from shared.UnitConverter import UnitConverter as Convert
 
+if TYPE_CHECKING:
+    from process_params.ChromParams import ChromParams
 
 #########################################################################################################
 # CLASS
@@ -33,7 +37,7 @@ class SemiContSusvDiscr(SusvDiscr):
     def from_params(
         cls,
         susvDiscrParams: SusvDiscrParams,
-        prevEquipment: GuardFilterDiscr,
+        prevEquipment: GuardFilterDiscr | Chrom,
         chromParams: ChromParams
     ) -> 'SemiContSusvDiscr':
 
@@ -45,12 +49,14 @@ class SemiContSusvDiscr(SusvDiscr):
         titrationVolumefactor: float = (1 + susvDiscrParams.phAdjustPercent / 100) * (
             1 + susvDiscrParams.conductivityAdjustPercent / 100)
 
+        # Reading the inflow and titer
+        # -----------------------------
         if isinstance(prevEquipment, GuardFilterDiscr):
             inFlow: float = [process.outFlow for process in prevEquipment.process if process.flowType ==
                              'normal'][0] * titrationVolumefactor
             titer = prevEquipment.titer / titrationVolumefactor
 
-        else:
+        if isinstance(prevEquipment, Chrom):
             load_steps = [step for step in prevEquipment.steps if step.name in (
                 'Load', 'load', 'Loading', 'loading')]
             inFlow: float = [step.flow for step in load_steps if step.flowType ==

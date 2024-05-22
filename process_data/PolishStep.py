@@ -1,8 +1,12 @@
-from equipment.Chrom import Chrom
-from equipment.BufferChromStep import BufferChromStep
-from equipment.LoadChromStep import LoadChromStep
-from equipment.SemiContSusvDiscr import SemiContSusvDiscr
-from process_params.ChromParams import ChromParams
+from __future__ import annotations
+from typing import TYPE_CHECKING
+from process_data.Chrom import Chrom
+from process_data.LoadChromStep import LoadChromStep
+
+if TYPE_CHECKING:
+    from process_data.SemiContSusvDiscr import SemiContSusvDiscr
+    from process_params.ChromParams import ChromParams
+    from process_data.BufferChromStep import BufferChromStep
 
 #########################################################################################################
 # CLASS
@@ -30,8 +34,8 @@ class PolishStep(Chrom):
     @classmethod
     def from_params(
         cls,
-        chromParams: ChromParams,
-    ) -> 'PolishStep':
+        chromParams: 'ChromParams',
+    ) -> PolishStep:
 
         return super().from_params(chromParams)
 

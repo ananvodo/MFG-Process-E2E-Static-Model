@@ -1,13 +1,16 @@
-from equipment.Chrom import Chrom
-from equipment.PerfusionFilter import PerfusionFilter
-from equipment.SusvDiscr import SusvDiscr
-from equipment.Vi import Vi
-from process_params.SusvDiscrParams import SusvDiscrParams
+from __future__ import annotations
+from typing import TYPE_CHECKING
+from process_data.SusvDiscr import SusvDiscr
+from process_data.Chrom import Chrom
+from process_data.PerfusionFilter import PerfusionFilter
+from process_data.Vi import Vi
 from shared.UnitConverter import UnitConverter as Convert
 
 #########################################################################################################
 # CLASS
 #########################################################################################################
+if TYPE_CHECKING:
+    from process_params.SusvDiscrParams import SusvDiscrParams
 
 
 class ContSusvDiscr(SusvDiscr):
@@ -33,15 +36,18 @@ class ContSusvDiscr(SusvDiscr):
         cls,
         susvDiscrParams: SusvDiscrParams,
         prevEquipment: PerfusionFilter | Vi | Chrom
-    ) -> 'ContSusvDiscr':
+    ) -> ContSusvDiscr:
 
         titrationVolumefactor: float = (1 + susvDiscrParams.phAdjustPercent / 100) * (
             1 + susvDiscrParams.conductivityAdjustPercent / 100)
         titer = prevEquipment.titer / titrationVolumefactor
 
-        if isinstance(prevEquipment, PerfusionFilter) or isinstance(prevEquipment, Vi):
+        if isinstance(prevEquipment, Vi):
             inFlow: float = [process.outFlow for process in prevEquipment.process if process.flowType ==
                              'normal'][0] * titrationVolumefactor
+
+        if isinstance(prevEquipment, PerfusionFilter):
+            inFlow: float = prevEquipment.outFlow * titrationVolumefactor
 
         if isinstance(prevEquipment, Chrom):
             load_normal = [step for step in prevEquipment.steps if step.name in (
