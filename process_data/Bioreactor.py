@@ -31,9 +31,9 @@ class Bioreactor(ProcessData):
     ) -> 'Bioreactor':
 
         outFlow: float = bioreactorParams.volume * bioreactorParams.vvd / 24
-        inFlow: float = bioreactorParams.outFlow * \
+        inFlow: float = outFlow * \
             (1 + bioreactorParams.bleedPercent / 100)
-        bleedFlow: float = bioreactorParams.outFlow * \
+        bleedFlow: float = outFlow * \
             (bioreactorParams.bleedPercent / 100)
 
         # Create an instance of the class

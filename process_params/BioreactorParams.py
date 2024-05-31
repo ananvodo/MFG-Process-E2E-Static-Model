@@ -27,11 +27,6 @@ class BioreactorParams(Params):
         self.volume = volume  # in L
         self.vvd = vvd
         self.bleedPercent = bleedPercent  # bleed is percentage
-        self.outFlow: float = self.volume * self.vvd / \
-            24  # in L/h. The 24 is to convert to h. This is really the perf flowrate
-        self.inFlow: float = self.outFlow * \
-            (1 + self.bleedPercent)  # in L/h. Media flowrate
-        self.bleedFlow: float = self.outFlow * self.bleedPercent
 
         return None
     # -------------------------------------------------------------------------------------------------
@@ -55,7 +50,4 @@ class BioreactorParams(Params):
             titer: {self.titer}
             volume: {self.volume}
             vvd: {self.vvd}
-            bleedPercent: {self.bleedPercent}
-            outFlow: {self.outFlow}
-            inFlow: {self.inFlow}
-            bleedFlow: {self.bleedFlow}'''
+            bleedPercent: {self.bleedPercent}'''
